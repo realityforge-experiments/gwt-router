@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <inherits name="elemental2"/>
+  <inherits name="com.google.gwt.core.Core"/>
+
+  <entry-point class='router.client.Router'/>
+</module>
