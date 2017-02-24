@@ -1,0 +1,16 @@
+{
+  "vendor/tools/buildr_plus": {
+    "url": "https://github.com/realityforge/buildr_plus.git",
+    "remote": "master/braid/vendor/tools/buildr_plus",
+    "branch": "master",
+    "squashed": true,
+    "revision": "c4bfb32eb146abe54e09244a320ac13087f1a8bf"
+  },
+  "vendor/tools/redfish": {
+    "url": "https://github.com/realityforge/redfish.git",
+    "remote": "master/braid/vendor/tools/redfish",
+    "branch": "master",
+    "squashed": true,
+    "revision": "e5b67eaaa74458d00c447a57ddc40a54e6fd0b8e"
+  }
+}
