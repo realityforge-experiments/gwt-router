@@ -17,20 +17,26 @@ public final class Router
   private final RouteDefinition[] _routes = new RouteDefinition[]
     {
       new RouteDefinition( "#/", null, null, ( route, element ) -> route1( element ), null ),
-      new RouteDefinition( "#/foo", null, null, ( route, element ) -> route2( element ), null ),
+      new RouteDefinition( "#/foo", null, null, ( route, element ) -> route2( element, "foo" ), null ),
       new RouteDefinition( new RegExp( "^#/baz/(\\d+)/(\\d)$", "" ),
                            new String[]{ "bazID", "buzID" },
                            null,
                            null,
-                           ( route, element ) -> route2( element ),
+                           ( route, element ) -> route2( element, "baz2" ),
                            null ),
       new RouteDefinition( new RegExp( "^#/baz/(\\d+)$", "" ),
                            new String[]{ "bazID" },
+                           ( route -> route.getRouteData().get( "bazID" ).equals( "42" ) ),
                            null,
+                           ( route, element ) -> route2( element, "baz" ),
+                           null ),
+      new RouteDefinition( new RegExp( "^#/biz/(\\d+)$", "" ),
+                           new String[]{ "bazID" },
+                           ( route -> route.getRouteData().get( "bazID" ).equals( "42" ) ),
                            null,
-                           ( route, element ) -> route2( element ),
-                           null )
-    };
+                           ( route, element ) -> route2( element, "biz" ),
+                           ( route -> info( "PostRoute " + route ) ) ),
+      };
 
   private Node route1( final Element element )
   {
@@ -39,10 +45,10 @@ public final class Router
     return element.appendChild( div );
   }
 
-  private Node route2( final Element element )
+  private Node route2( final Element element, final String string )
   {
     final HTMLDivElement div = (HTMLDivElement) Global.document.createElement( "div" );
-    div.innerHTML = "<h1>route2</h1>";
+    div.innerHTML = "<h1>" + string + "</h1>";
     return element.appendChild( div );
   }
 
@@ -76,20 +82,41 @@ public final class Router
     info( "location.hash: " + hash );
 
     final Element rootElement = Global.document.getElementById( "hook" );
-    for ( final RouteDefinition route : _routes )
+    for ( final RouteDefinition definition : _routes )
     {
-      info( "Match? " + hash + " against " + route.getPath() );
-      final Map<String, Object> routeData = route.match( hash );
+      final Map<String, Object> routeData = definition.match( hash );
       if ( null != routeData )
       {
-        info( "Matched " + route.getPath() + " routeData: " + routeData );
-        final RouteCallback routeCallback = route.getRoute();
-        routeCallback.route( new Route( route, routeData ), rootElement );
-        return;
+        final Route route = new Route( definition, routeData );
+        final PreRouteGuardCallback preRouteGuard = definition.getPreRouteGuard();
+        if ( preRouteGuard == null || preRouteGuard.preRouteGuard( route ) )
+        {
+          final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
+          if ( null != beforeRoute )
+          {
+            beforeRoute.beforeRoute( route, () -> performRoute( route, rootElement ) );
+          }
+          else
+          {
+            performRoute( route, rootElement );
+          }
+          return;
+        }
       }
     }
 
     JsObjects.set( Global.window.location, "hash", "#/" );
+  }
+
+  private void performRoute( @Nonnull final Route route, @Nonnull final Element rootElement )
+  {
+    final RouteDefinition definition = route.getDefinition();
+    definition.getRoute().route( route, rootElement );
+    final PostRouteCallback postRoute = definition.getPostRoute();
+    if ( null != postRoute )
+    {
+      postRoute.postRoute( route );
+    }
   }
 
   public static native void error( String message ) /*-{
