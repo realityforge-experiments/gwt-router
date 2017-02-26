@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='infernamental'>
+<module rename-to='router'>
   <inherits name='router.Router'/>
 
   <!-- Disable many checks not needed if code is correct. See https://github.com/gwtproject/gwt/blob/2.8.0/user/super/com/google/gwt/emul/javaemul/internal/InternalPreconditions.java -->

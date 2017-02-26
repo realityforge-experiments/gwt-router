@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='infernamental'>
+<module rename-to='router'>
   <inherits name='router.Router'/>
   <inherits name="com.google.gwt.logging.Logging"/>
 
