@@ -20,6 +20,8 @@ public class RouteDefinition
   private final BeforeRouteCallback _beforeRoute;
   @Nonnull
   private final RouteCallback _route;
+  @Nonnull
+  private final UpdateRouteCallback _updateRoute;
   @Nullable
   private final PostRouteCallback _postRoute;
 
@@ -28,6 +30,7 @@ public class RouteDefinition
                           @Nullable final PreRouteGuardCallback preRouteGuard,
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
+                          @Nullable final UpdateRouteCallback updateRoute,
                           @Nullable final PostRouteCallback postRoute )
   {
     assert null != path;
@@ -41,6 +44,7 @@ public class RouteDefinition
     _preRouteGuard = preRouteGuard;
     _beforeRoute = beforeRoute;
     _route = route;
+    _updateRoute = updateRoute;
     _postRoute = postRoute;
   }
 
@@ -50,6 +54,7 @@ public class RouteDefinition
                           @Nullable final PreRouteGuardCallback preRouteGuard,
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
+                          @Nullable final UpdateRouteCallback updateRoute,
                           @Nullable final PostRouteCallback postRoute )
   {
     assert null != matcher;
@@ -61,6 +66,7 @@ public class RouteDefinition
     _preRouteGuard = preRouteGuard;
     _beforeRoute = beforeRoute;
     _route = route;
+    _updateRoute = updateRoute;
     _postRoute = postRoute;
   }
 
@@ -86,6 +92,12 @@ public class RouteDefinition
   public RouteCallback getRoute()
   {
     return _route;
+  }
+
+  @Nonnull
+  public UpdateRouteCallback getUpdateRoute()
+  {
+    return _updateRoute;
   }
 
   @Nullable

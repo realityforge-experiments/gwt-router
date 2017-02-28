@@ -18,6 +18,8 @@ public final class RouteManager
   private final Element _rootElement;
   @Nullable
   private String _defaultHash;
+  @Nullable
+  private Route _lastRoute;
   private Object _callback;
 
   public RouteManager( @Nonnull final RouteDefinition[] routes,
@@ -85,6 +87,7 @@ public final class RouteManager
       final Route route = new Route( definition, routeData );
       if ( null != routeData && processRoute( route ) )
       {
+        _lastRoute = route;
         return route;
       }
     }
@@ -98,6 +101,15 @@ public final class RouteManager
     final PreRouteGuardCallback preRouteGuard = definition.getPreRouteGuard();
     if ( preRouteGuard == null || preRouteGuard.preRouteGuard( route ) )
     {
+      if( null != _lastRoute && _lastRoute.getDefinition() == definition )
+      {
+        final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
+        if( null != updateRoute )
+        {
+          updateRoute.updateRoute( route );
+          return true;
+        }
+      }
       final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
       if ( null != beforeRoute )
       {
