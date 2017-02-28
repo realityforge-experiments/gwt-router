@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RouteDefinition
+public final class RouteDefinition
 {
   @Nonnull
   private final RegExp _matcher;
