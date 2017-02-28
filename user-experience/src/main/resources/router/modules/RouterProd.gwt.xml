@@ -7,4 +7,6 @@
 
   <!-- This reduces a lot the size of compiled javascript-->
   <set-property name="compiler.stackMode" value="strip"/>
+
+  <add-linker name="sso" />
 </module>
