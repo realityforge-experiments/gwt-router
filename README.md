@@ -5,3 +5,12 @@
 ## What is Router?
 
 A project that experiments with simplified routing under gwt.
+
+## TODO:
+
+* Strip # from front of hash before routing.
+* Add multiple variants backed up by different backend technologies. i.e. elemental2, elemental and gwt core.
+* Start to document router.
+* Write annotation processor that generates and configures 1 or more router managers based on the presence of annotations.
+* Support routes that dynamically load routes. i.e. Add a route that dynamically loads a set of routes and replaces itself with them.
+* Support either child or peer routers. These routers pick up optional routes that are suffixed to the main route and delegated to separate components. Typically these will be things like popup dialogs that contain some state. 
