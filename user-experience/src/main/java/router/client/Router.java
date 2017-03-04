@@ -11,9 +11,9 @@ public final class Router
 {
   private RouteManager _routeManager;
 
-  private void route2( final Element element, final String string )
+  private void route2( final Object element, final String string )
   {
-    element.innerHTML = "<h1>" + string + "</h1>";
+    ( (Element) element ).innerHTML = "<h1>" + string + "</h1>";
   }
 
   public void onModuleLoad()
