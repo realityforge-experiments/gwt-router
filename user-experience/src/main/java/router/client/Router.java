@@ -22,55 +22,58 @@ public final class Router
 
     final RouteDefinition[] routes = new RouteDefinition[]
       {
-        new RouteDefinition( "#/", null, null, ( route, element ) -> route2( element, "#/" ), null, null ),
-        new RouteDefinition( "#/foo", null, null, ( route, element ) -> route2( element, "#/foo" ), null, null ),
-        new RouteDefinition( new RegExp( "^#/baz/(\\d+)/(\\d+)$", "" ),
+        new RouteDefinition( "/", null, null, ( route, element ) -> route2( element, "/" ), null, null ),
+        new RouteDefinition( "/foo", null, null, ( route, element ) -> route2( element, "/foo" ), null, null ),
+        new RouteDefinition( new RegExp( "^/baz/(\\d+)/(\\d+)$", "" ),
                              new String[]{ "bazID", "buzID" },
                              null,
                              null,
                              ( route, element ) -> route2( element,
-                                                           "#/baz/" +
+                                                           "/baz/" +
                                                            route.getData( "bazID" ) +
                                                            "/" +
                                                            route.getData( "buzID" ) ),
                              null,
                              null ),
-        new RouteDefinition( new RegExp( "^#/baz/(\\d+)$", "" ),
+        new RouteDefinition( new RegExp( "^/baz/(\\d+)$", "" ),
                              new String[]{ "bazID" },
                              ( route -> Objects.equals( route.getData( "bazID" ), "42" ) ),
                              null,
-                             ( route, element ) -> route2( element, "#/baz/" + route.getData( "bazID" ) ),
+                             ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
                              null,
                              null ),
-        new RouteDefinition( new RegExp( "^#/biz/(\\d+)$", "" ),
+        new RouteDefinition( new RegExp( "^/biz/(\\d+)$", "" ),
                              new String[]{ "bazID" },
                              ( route -> Objects.equals( route.getData( "bazID" ), "42" ) ),
                              null,
-                             ( route, element ) -> route2( element, "#/biz/" + route.getData( "bazID" ) ),
+                             ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
                              null,
                              ( route -> info( "PostRoute " + route ) ) ),
-        new RouteDefinition( new RegExp( "^#/ding/(\\d+)$", "" ),
+        new RouteDefinition( new RegExp( "^/ding/(\\d+)$", "" ),
                              new String[]{ "bazID" },
                              null,
                              null,
-                             ( route, element ) -> route2( element, "#/ding/" + route.getData( "bazID" ) ),
+                             ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
                              route -> route2( Global.document.getElementById( "hook" ),
-                                              "#/ding/" + route.getData( "bazID" ) + " (NoRoute)" ),
+                                              "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ),
                              null ),
-        new RouteDefinition( new RegExp( "^#/end$", "" ),
+        new RouteDefinition( new RegExp( "^/end$", "" ),
                              new String[ 0 ],
                              null,
                              null,
                              ( route, element ) ->
                              {
-                               route2( element, "#/end" );
+                               route2( element, "/end" );
                                _routeManager.uninstall();
                              },
                              null,
                              null ),
         };
 
-    _routeManager = new RouteManager( routes, rootElement, "#/" );
+    final boolean useElemental = true;
+    @SuppressWarnings( "ConstantConditions" )
+    final RoutingBackend backend = useElemental ? new Elemental2RoutingBackend() : new GwtFrameworkRoutingBackend();
+    _routeManager = new RouteManager( backend, routes, rootElement, "/" );
     _routeManager.install();
     try
     {

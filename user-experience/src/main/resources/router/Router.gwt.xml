@@ -2,6 +2,7 @@
 <module>
   <inherits name="elemental2"/>
   <inherits name="com.google.gwt.core.Core"/>
+  <inherits name="com.google.gwt.user.UI"/>
 
   <entry-point class='router.client.Router'/>
 </module>

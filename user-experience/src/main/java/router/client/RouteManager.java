@@ -1,8 +1,5 @@
 package router.client;
 
-import elemental2.Element;
-import elemental2.Global;
-import elemental2.Window;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -12,42 +9,44 @@ import javax.annotation.Nullable;
 @SuppressWarnings( { "ConstantConditions", "WeakerAccess" } )
 public final class RouteManager
 {
+  private final RoutingBackend _backend;
   @Nonnull
   private final RouteDefinition[] _routes;
   @Nonnull
-  private final Element _rootElement;
+  private final Object _target;
   @Nullable
   private String _defaultHash;
   @Nullable
   private Route _lastRoute;
   private Object _callback;
 
-  public RouteManager( @Nonnull final RouteDefinition[] routes,
-                       @Nonnull final Element rootElement,
+  public RouteManager( @Nonnull final RoutingBackend backend,
+                       @Nonnull final RouteDefinition[] routes,
+                       @Nonnull final Object target,
                        @Nullable final String defaultHash )
   {
+    assert null != backend;
     assert null != routes;
-    assert null != rootElement;
+    assert null != target;
     assert Stream.of( routes ).noneMatch( Objects::isNull );
 
+    _backend = backend;
     _routes = routes;
-    _rootElement = rootElement;
+    _target = target;
     _defaultHash = defaultHash;
   }
 
   public void install()
   {
     uninstall();
-    final Window.AddEventListenerListenerCallback callback = ( e ) -> onHashChange();
-    Global.window.addEventListener( "hashchange", callback, false );
-    _callback = callback;
+    _callback = _backend.addListener( h -> onHashChange() );
   }
 
   public void uninstall()
   {
-    if( null != _callback )
+    if ( null != _callback )
     {
-      Global.window.removeEventListener( "hashchange", (Window.RemoveEventListenerListenerCallback) _callback, false );
+      _backend.removeListener( _callback );
       _callback = null;
     }
   }
@@ -61,7 +60,7 @@ public final class RouteManager
   @Nullable
   public Route route()
   {
-    final String hash = JsObjects.get( Global.window.location, "hash" );
+    final String hash = _backend.getHash();
 
     final Route route = attemptRouteMatch( hash );
     if ( null != route )
@@ -70,7 +69,7 @@ public final class RouteManager
     }
     else if ( null != _defaultHash )
     {
-      JsObjects.set( Global.window.location, "hash", _defaultHash );
+      _backend.setHash( _defaultHash );
       return attemptRouteMatch( hash );
     }
     else
@@ -101,10 +100,10 @@ public final class RouteManager
     final PreRouteGuardCallback preRouteGuard = definition.getPreRouteGuard();
     if ( preRouteGuard == null || preRouteGuard.preRouteGuard( route ) )
     {
-      if( null != _lastRoute && _lastRoute.getDefinition() == definition )
+      if ( null != _lastRoute && _lastRoute.getDefinition() == definition )
       {
         final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
-        if( null != updateRoute )
+        if ( null != updateRoute )
         {
           updateRoute.updateRoute( route );
           return true;
@@ -130,7 +129,7 @@ public final class RouteManager
   private void completeRouting( @Nonnull final Route route )
   {
     final RouteDefinition definition = route.getDefinition();
-    definition.getRoute().route( route, _rootElement );
+    definition.getRoute().route( route, _target );
     final PostRouteCallback postRoute = definition.getPostRoute();
     if ( null != postRoute )
     {
