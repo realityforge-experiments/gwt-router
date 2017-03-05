@@ -107,10 +107,10 @@ public final class RouteDefinition
 
   @SuppressWarnings( "ConstantConditions" )
   @Nullable
-  public Map<String, Object> match( @Nonnull final String hash )
+  public Map<String, Object> match( @Nonnull final String location )
   {
-    assert null != hash;
-    final String[] groups = _matcher.exec( hash );
+    assert null != location;
+    final String[] groups = _matcher.exec( location );
     if ( null != groups )
     {
       final HashMap<String, Object> routeData = new HashMap<>();
