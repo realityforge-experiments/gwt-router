@@ -1,6 +1,5 @@
 package router.client;
 
-import elemental2.RegExp;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;

@@ -3,7 +3,6 @@ package router.client;
 import com.google.gwt.core.client.EntryPoint;
 import elemental2.Element;
 import elemental2.Global;
-import elemental2.RegExp;
 import java.util.Objects;
 
 public final class Router
