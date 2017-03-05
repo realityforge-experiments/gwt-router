@@ -4,7 +4,7 @@
     "remote": "master/braid/vendor/tools/buildr_plus",
     "branch": "master",
     "squashed": true,
-    "revision": "aab7f88c69914165b43cfa017dbf27a3e0e5dc4d"
+    "revision": "d20bdc42eab8cfe3542eeab2a936c18e26eee5f3"
   },
   "vendor/tools/redfish": {
     "url": "https://github.com/realityforge/redfish.git",
