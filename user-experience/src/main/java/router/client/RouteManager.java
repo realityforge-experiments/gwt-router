@@ -1,39 +1,50 @@
 package router.client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings( { "ConstantConditions", "WeakerAccess" } )
+@SuppressWarnings( { "ConstantConditions", "WeakerAccess", "SameParameterValue" } )
 public final class RouteManager
 {
   private final RoutingBackend _backend;
   @Nonnull
-  private final RouteDefinition[] _routes;
+  private final List<RouteDefinition> _routes = new ArrayList<>();
   @Nonnull
   private final Object _target;
   @Nullable
-  private String _defaultHash;
+  private String _defaultLocation;
   @Nullable
   private Route _lastRoute;
   private Object _callback;
 
   public RouteManager( @Nonnull final RoutingBackend backend,
-                       @Nonnull final RouteDefinition[] routes,
-                       @Nonnull final Object target,
-                       @Nullable final String defaultHash )
+                       @Nonnull final Object target )
   {
     assert null != backend;
-    assert null != routes;
     assert null != target;
-    assert Stream.of( routes ).noneMatch( Objects::isNull );
 
     _backend = backend;
-    _routes = routes;
     _target = target;
-    _defaultHash = defaultHash;
+  }
+
+  public void addRoute( @Nonnull final RouteDefinition route )
+  {
+    assert null != route;
+    _routes.add( route );
+  }
+
+  @Nullable
+  public String getDefaultLocation()
+  {
+    return _defaultLocation;
+  }
+
+  public void setDefaultLocation( @Nullable final String defaultLocation )
+  {
+    _defaultLocation = defaultLocation;
   }
 
   public void install()
@@ -67,9 +78,9 @@ public final class RouteManager
     {
       return route;
     }
-    else if ( null != _defaultHash )
+    else if ( null != _defaultLocation )
     {
-      _backend.setHash( _defaultHash );
+      _backend.setHash( _defaultLocation );
       return attemptRouteMatch( hash );
     }
     else
