@@ -106,6 +106,7 @@ public final class RouteDefinition
   }
 
   @SuppressWarnings( "ConstantConditions" )
+  @Nullable
   public Map<String, Object> match( @Nonnull final String hash )
   {
     assert null != hash;
