@@ -17,23 +17,43 @@ module Buildr #:nodoc:
   module IntellijIdea #:nodoc:
     class IdeaModule
       def module_root_component
-        options = {'inherit-compiler-output' => 'false'}
+        guiceyloops = Buildr.artifact(BuildrPlus::Libs.guiceyloops_lib)
+        if self.test_dependencies.any? { |d| d.to_s == guiceyloops.to_s }
+          self.test_dependencies.delete(guiceyloops)
+          self.test_dependencies.insert(0, guiceyloops)
+        end
+
+        # TODO: The followin has been merged into buildr 1.5.0+. Determine if above code is needed.
+
+        options = { 'inherit-compiler-output' => 'false' }
         options['LANGUAGE_LEVEL'] = "JDK_#{jdk_version.gsub(/\./, '_')}" unless jdk_version == buildr_project.root_project.compile.options.source
-        create_component('NewModuleRootManager', options ) do |xml|
+        create_component('NewModuleRootManager', options) do |xml|
           generate_compile_output(xml)
           generate_content(xml) unless skip_content?
           generate_initial_order_entries(xml)
           project_dependencies = []
 
-
+          # If a project dependency occurs as amain dependency then add it to the list
+          # that are excluded from list of test modules
           self.main_dependency_details.each do |dependency_path, export, source_path|
             next unless export
-            generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+            project_for_dependency = Buildr.projects.detect do |project|
+              [project.packages, project.compile.target, project.resources.target, project.test.compile.target, project.test.resources.target].flatten.
+                detect { |artifact| artifact.to_s == dependency_path }
+            end
+            project_dependencies << project_for_dependency if project_for_dependency
           end
 
+          main_project_dependencies = project_dependencies.dup
           self.test_dependency_details.each do |dependency_path, export, source_path|
             next if export
             generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+          end
+
+          test_project_dependencies = project_dependencies - main_project_dependencies
+          self.main_dependency_details.each do |dependency_path, export, source_path|
+            next unless export
+            generate_lib(xml, dependency_path, export, source_path, test_project_dependencies)
           end
 
           xml.orderEntryProperties
@@ -43,6 +63,7 @@ module Buildr #:nodoc:
 
     class IdeaProject
       def add_glassfish_remote_configuration(project, options = {})
+        raise 'Addon patched in the latest version of Buildr' unless Buildr::VERSION.to_s == '1.5.0'
         artifact_name = options[:name] || project.iml.id
         version = options[:version] || '4.1.0'
         server_name = options[:server_name] || "GlassFish #{version}"

@@ -133,7 +133,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_webpoller
-      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.2)
+      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.3)
     end
 
     def gwt_datatypes
@@ -202,6 +202,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.commons_logging + self.commons_codec
     end
 
+    def failsafe
+      %w(net.jodah:failsafe:jar:1.0.3)
+    end
+
     def keycloak_gwt
       %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.1)
     end
@@ -231,7 +235,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.71'
+      '0.5.74'
     end
 
     def replicant_shared
@@ -279,11 +283,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.glassfish_embedded + self.guiceyloops_gwt
+      self.guiceyloops_gwt + self.glassfish_embedded
+    end
+
+    def guiceyloops_lib
+      'org.realityforge.guiceyloops:guiceyloops:jar:0.83'
     end
 
     def guiceyloops_gwt
-      %w(org.realityforge.guiceyloops:guiceyloops:jar:0.82) + self.mockito + self.guice + self.testng
+      [guiceyloops_lib] + self.mockito + self.guice + self.testng
     end
 
     def glassfish_timers_domain

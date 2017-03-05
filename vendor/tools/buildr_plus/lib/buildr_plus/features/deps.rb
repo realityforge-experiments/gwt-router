@@ -24,7 +24,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def model_generators
-      generators = [:ee_data_types]
+      generators = [:ee_data_types, :ee_cdi_qualifier]
       if BuildrPlus::FeatureManager.activated?(:db)
         generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
         generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
@@ -33,6 +33,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
+      generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
 
       generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
@@ -96,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
-      generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
+      generators << [:jms_services, :jms_qa_support] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
       generators << [:appcache] if BuildrPlus::FeatureManager.activated?(:appcache)
       generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
@@ -134,6 +135,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules]
       generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
+      generators.flatten
+    end
+
+    def integration_qa_support_generators
+      generators = [:ee_integration]
+      generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
+      generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
       generators.flatten
     end
 
@@ -225,8 +234,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def model_qa_support_deps
       dependencies = []
 
-      dependencies << model_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+      dependencies << model_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.db_drivers]) if BuildrPlus::FeatureManager.activated?(:db)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Mail.mail_qa, BuildrPlus::Libs.mustache, BuildrPlus::Libs.greenmail]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
@@ -238,9 +247,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def integration_qa_support_deps
       dependencies = []
 
+      dependencies << model_qa_support_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
-      dependencies << model_qa_support_deps
 
       dependencies.flatten
     end

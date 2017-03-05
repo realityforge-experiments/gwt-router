@@ -16,23 +16,26 @@ BuildrPlus::Roles.role(:server) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = BuildrPlus::Deps.server_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
-      t.filter = project.domgen_filter
+      t.filter = Proc.new do |artifact_type, artifact|
+        if artifact_type == :message && (artifact.imit? && artifact.imit.subscription_message?)
+          false
+        elsif project.domgen_filter
+          project.domgen_filter(artifact_type, artifact)
+        else
+          true
+        end
+      end
     end
   end
 
   project.publish = true
 
-  # Our soap services use annotation for validation that is metro specific
-  compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap)
-
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
-  compile.with BuildrPlus::Libs.ee_provided unless BuildrPlus::FeatureManager.activated?(:role_model)
+  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+  test.with BuildrPlus::Deps.server_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
-
-  test.with BuildrPlus::Deps.server_test_deps
 
   package(:war).tap do |war|
     war.libs.clear
