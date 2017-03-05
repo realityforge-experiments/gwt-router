@@ -12,7 +12,4 @@
 # limitations under the License.
 #
 
-require 'buildr_plus/projects/_common'
-require 'buildr/jacoco'
-
-BuildrPlus::FeatureManager.activate_features([:findbugs, :pmd, :checkstyle, :compile_options, :testng, :ejb, :jaxrs, :guiceyloops, :powermock])
+BuildrPlus::FeatureManager.feature(:powermock)
