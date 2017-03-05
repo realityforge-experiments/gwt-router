@@ -2,11 +2,15 @@ package router.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class RouteDefinition
 {
+  //The relative priority of the route. Lower priorities are higher priority. Priority should not be below zero.
+  @Nonnegative
+  private final int _priority;
   @Nonnull
   private final RegExp _matcher;
   @Nullable
@@ -25,30 +29,33 @@ public final class RouteDefinition
   private final PostRouteCallback _postRoute;
 
   @SuppressWarnings( "ConstantConditions" )
-  public RouteDefinition( @Nonnull final String path,
+  public RouteDefinition( @Nonnegative final int priority,
+                          @Nonnull final String path,
                           @Nullable final PreRouteGuardCallback preRouteGuard,
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
                           @Nullable final UpdateRouteCallback updateRoute,
                           @Nullable final PostRouteCallback postRoute )
   {
-    assert null != path;
-    assert null != route;
-    _path = path;
+    this( priority,
+          path,
+          pathToRegex( path ),
+          new String[ 0 ],
+          preRouteGuard,
+          beforeRoute,
+          route,
+          updateRoute,
+          postRoute );
+  }
 
-    final String regex =
-      "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
-    _matcher = new RegExp( regex );
-    _parameterKeys = null;
-    _preRouteGuard = preRouteGuard;
-    _beforeRoute = beforeRoute;
-    _route = route;
-    _updateRoute = updateRoute;
-    _postRoute = postRoute;
+  static RegExp pathToRegex( @Nonnull final String path )
+  {
+    return new RegExp( "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$" );
   }
 
   @SuppressWarnings( "ConstantConditions" )
-  public RouteDefinition( @Nonnull final RegExp matcher,
+  public RouteDefinition( @Nonnegative final int priority,
+                          @Nonnull final RegExp matcher,
                           @Nonnull final String[] parameterKeys,
                           @Nullable final PreRouteGuardCallback preRouteGuard,
                           @Nullable final BeforeRouteCallback beforeRoute,
@@ -56,10 +63,35 @@ public final class RouteDefinition
                           @Nullable final UpdateRouteCallback updateRoute,
                           @Nullable final PostRouteCallback postRoute )
   {
+    this( priority,
+          matcher.toString(),
+          matcher,
+          parameterKeys,
+          preRouteGuard,
+          beforeRoute,
+          route,
+          updateRoute,
+          postRoute );
+  }
+
+  @SuppressWarnings( "ConstantConditions" )
+  private RouteDefinition( @Nonnegative final int priority,
+                           @Nonnull final String path,
+                           @Nonnull final RegExp matcher,
+                           @Nonnull final String[] parameterKeys,
+                           @Nullable final PreRouteGuardCallback preRouteGuard,
+                           @Nullable final BeforeRouteCallback beforeRoute,
+                           @Nonnull final RouteCallback route,
+                           @Nullable final UpdateRouteCallback updateRoute,
+                           @Nullable final PostRouteCallback postRoute )
+  {
+    assert priority >= 0;
+    assert null != path;
     assert null != matcher;
     assert null != parameterKeys;
     assert null != route;
-    _path = matcher.toString();
+    _priority = priority;
+    _path = path;
     _parameterKeys = parameterKeys;
     _matcher = matcher;
     _preRouteGuard = preRouteGuard;
@@ -67,6 +99,12 @@ public final class RouteDefinition
     _route = route;
     _updateRoute = updateRoute;
     _postRoute = postRoute;
+  }
+
+  @Nonnegative
+  public int getPriority()
+  {
+    return _priority;
   }
 
   @Nonnull
