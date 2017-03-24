@@ -40,6 +40,8 @@ includes one or more callbacks that can be added to the respective phases.
 
 ## TODO:
 
+* Route callbacks can be sync or async. Optional parameter indicating the variety.
+* Routes may not terminate the search. i.e. A Route may "match" but all it does is add hooks and let matching continue.
 * Start to document router.
 * Write annotation processor that generates and configures 1 or more router managers based on the presence of annotations.
 * Support routes that dynamically load routes. i.e. Add a route that dynamically loads a set of routes and replaces itself with them.
