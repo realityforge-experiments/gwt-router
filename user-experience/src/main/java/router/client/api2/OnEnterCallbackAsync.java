@@ -6,7 +6,7 @@ import router.client.Route;
 
 @JsFunction
 @FunctionalInterface
-public interface RouteCallbackAsync
+public interface OnEnterCallbackAsync
 {
-  void route( @Nonnull Route previousRoute, @Nonnull Route nextRoute, @Nonnull RouteControl control );
+  void onEnter( @Nonnull Route previousRoute, @Nonnull Route nextRoute, @Nonnull OnEnterControl control );
 }

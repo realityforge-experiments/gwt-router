@@ -6,12 +6,12 @@ import router.client.Route;
 
 @JsFunction
 @FunctionalInterface
-public interface PreRouteCallback
+public interface OnLeaveCallback
 {
-  boolean preRoute( @Nonnull Route route );
+  void onLeave( @Nonnull Route route );
 
-  default PreRouteCallbackAsync asAsync()
+  default OnLeaveCallbackAsync asAsync()
   {
-    return new PreRouteCallbackAsyncAdapter( this );
+    return new OnLeaveCallbackAsyncAdapter( this );
   }
 }

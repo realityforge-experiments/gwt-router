@@ -6,7 +6,7 @@ import router.client.Route;
 
 @JsFunction
 @FunctionalInterface
-public interface PreRouteCallbackAsync
+public interface OnLeaveCallbackAsync
 {
-  void preRoute( @Nonnull Route route, @Nonnull PreRouteControl control );
+  void onLeave( @Nonnull Route route, @Nonnull OnLeaveControl control );
 }

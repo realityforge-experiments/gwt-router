@@ -6,7 +6,7 @@ import router.client.Route;
 
 @JsFunction
 @FunctionalInterface
-public interface PostRouteCallbackAsync
+public interface OnChangeCallbackAsync
 {
-  void postRoute( @Nonnull Route route, @Nonnull PostRouteControl control );
+  void onChange( @Nonnull Route previousRoute, @Nonnull Route nextRoute, @Nonnull OnChangeControl control );
 }
