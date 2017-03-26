@@ -5,6 +5,7 @@
 ## What is Router?
 
 A project that experiments with simplified routing under gwt.
+https://github.com/ReactTraining/react-router
 
 ## Router API
 
@@ -14,21 +15,22 @@ routing libraries to implement routing within an application.
 
 The routing library attempts to perform routing in 3 distinct phases.
 
-* `PreRouting`: This phase occurs before routing actually occurs and may result in routing being
-  aborted before being completed. This is where code that implements guards and security checks
-  is expected to be located.
-* `Routing`: This phase actually implements the routing operations. The updating of the UI typically
+* `Change`: This phase occurs before routing actually occurs and may result in routing being
+  aborted before being completed. This is where the code that implements guards and security checks
+  is expected to be located. On completion the `Exit` chain is invoked for the existing location and
+  then the `Enter` chain is invoked for the new location.
+* `Enter`: This phase actually implements the routing operations. The updating of the UI typically
   occurs within this phase.
-* `PostRouting`: This phase occurs after routing has completed. This phase usually triggers non-UI
-  services such as loading data from the server.
+* `Exit`: This phase occurs is used to allow code to execute when a location is moved away from.
 
-Each phase consists of an list of callbacks that are invoked in succession. Each phase consists of
+Each phase consists of a chain of callbacks that are invoked in succession. Each phase consists of
 a unique callback interface that defines the operations allowed during that phase. Each callback has a
 synchronous as well as an asynchronous variant. The asynchronous variant should be used sparingly
-as it may lead to an unresponsive UI if the callback takes a long time to complete. The `PreRouting`
-and `Routing` phases are given access to controls that can abort further route processing. This is
-useful when the route processing has either completed or the callback has redirected to a different
-location.
+as it may lead to an unresponsive UI if the callback takes a long time to complete. The `Change`
+callback chain is passed a control that allows aborting further route processing and this is typically
+used when the callback redirects to a different location. The `Enter` phase is also passed a control
+that can terminate further processing of the callback chain and this is typically done when processing
+is complete.
 
 The current application bases the location on the hash in the url. When the "location" in an application
 changes, the application calls into the `RouteManager` to generate the list of callbacks for each phase
