@@ -75,8 +75,8 @@ public final class Router
         };
 
     final boolean useElemental = true;
-    @SuppressWarnings( "ConstantConditions" )
-    final RoutingBackend backend = useElemental ? new Elemental2RoutingBackend() : new GwtFrameworkRoutingBackend();
+    @SuppressWarnings( "ConstantConditions" ) final RoutingBackend backend =
+      useElemental ? new Elemental2RoutingBackend() : new GwtFrameworkRoutingBackend();
     _routeManager = new RouteManager( backend, rootElement );
     _routeManager.setDefaultLocation( "/" );
     for ( final RouteDefinition route : routes )
