@@ -71,9 +71,9 @@ public final class RouteManager
   @Nullable
   public Route route()
   {
-    final String hash = _backend.getHash();
+    final String location = _backend.getHash();
 
-    final Route route = attemptRouteMatch( hash );
+    final Route route = attemptRouteMatch( location );
     if ( null != route )
     {
       return route;
@@ -81,7 +81,7 @@ public final class RouteManager
     else if ( null != _defaultLocation )
     {
       _backend.setHash( _defaultLocation );
-      return attemptRouteMatch( hash );
+      return attemptRouteMatch( location );
     }
     else
     {
