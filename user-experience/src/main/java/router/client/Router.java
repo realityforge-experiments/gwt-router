@@ -21,8 +21,8 @@ public final class Router
 
     final RouteDefinition[] routes = new RouteDefinition[]
       {
-        new RouteDefinition( 1, "/", null, null, ( route, element ) -> route2( element, "/" ), null, null ),
-        new RouteDefinition( 1, "/foo", null, null, ( route, element ) -> route2( element, "/foo" ), null, null ),
+        new RouteDefinition( 1, "/", null, null, ( route, element ) -> route2( element, "/" ), null, null, true ),
+        new RouteDefinition( 1, "/foo", null, null, ( route, element ) -> route2( element, "/foo" ), null, null, true ),
         new RouteDefinition( 1,
                              new RegExp( "^/baz/(\\d+)/(\\d+)$" ),
                              new String[]{ "bazID", "buzID" },
@@ -34,7 +34,8 @@ public final class Router
                                                            "/" +
                                                            route.getData( "buzID" ) ),
                              null,
-                             null ),
+                             null,
+                             true ),
         new RouteDefinition( 1,
                              new RegExp( "^/baz/(\\d+)$" ),
                              new String[]{ "bazID" },
@@ -42,7 +43,8 @@ public final class Router
                              null,
                              ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
                              null,
-                             null ),
+                             null,
+                             true ),
         new RouteDefinition( 1,
                              new RegExp( "^/biz/(\\d+)$" ),
                              new String[]{ "bazID" },
@@ -50,16 +52,18 @@ public final class Router
                              null,
                              ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
                              null,
-                             ( route -> info( "PostRoute " + route ) ) ),
+                             ( route -> info( "PostRoute " + route ) ),
+                             true ),
         new RouteDefinition( 1,
-                             new RegExp( "^/ding/(\\d+)$"  ),
+                             new RegExp( "^/ding/(\\d+)$" ),
                              new String[]{ "bazID" },
                              null,
                              null,
                              ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
                              route -> route2( Global.document.getElementById( "hook" ),
                                               "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ),
-                             null ),
+                             null,
+                             true ),
         new RouteDefinition( 1,
                              new RegExp( "^/end$" ),
                              new String[ 0 ],
@@ -71,7 +75,8 @@ public final class Router
                                _routeManager.uninstall();
                              },
                              null,
-                             null ),
+                             null,
+                             true ),
         };
 
     final boolean useElemental = true;
