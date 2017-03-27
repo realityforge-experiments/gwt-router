@@ -24,6 +24,12 @@ public final class Route
   }
 
   @Nonnull
+  public String getLocation()
+  {
+    return _location;
+  }
+
+  @Nonnull
   public RouteDefinition getDefinition()
   {
     return _definition;
