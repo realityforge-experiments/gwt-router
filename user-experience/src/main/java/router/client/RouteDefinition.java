@@ -27,6 +27,10 @@ public final class RouteDefinition
   private final UpdateRouteCallback _updateRoute;
   @Nullable
   private final PostRouteCallback _postRoute;
+  /**
+   * Controls whether this onEnter definition finalizes the search for a onEnter or just adds callbacks to the chain.
+   */
+  private final boolean _terminal;
 
   @SuppressWarnings( "ConstantConditions" )
   public RouteDefinition( @Nonnegative final int priority,
@@ -35,7 +39,8 @@ public final class RouteDefinition
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
                           @Nullable final UpdateRouteCallback updateRoute,
-                          @Nullable final PostRouteCallback postRoute )
+                          @Nullable final PostRouteCallback postRoute,
+                          final boolean terminal )
   {
     this( priority,
           path,
@@ -45,7 +50,8 @@ public final class RouteDefinition
           beforeRoute,
           route,
           updateRoute,
-          postRoute );
+          postRoute,
+          terminal );
   }
 
   static RegExp pathToRegex( @Nonnull final String path )
@@ -61,7 +67,8 @@ public final class RouteDefinition
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
                           @Nullable final UpdateRouteCallback updateRoute,
-                          @Nullable final PostRouteCallback postRoute )
+                          @Nullable final PostRouteCallback postRoute,
+                          final boolean terminal )
   {
     this( priority,
           matcher.toString(),
@@ -71,7 +78,8 @@ public final class RouteDefinition
           beforeRoute,
           route,
           updateRoute,
-          postRoute );
+          postRoute,
+          terminal );
   }
 
   @SuppressWarnings( "ConstantConditions" )
@@ -83,7 +91,8 @@ public final class RouteDefinition
                            @Nullable final BeforeRouteCallback beforeRoute,
                            @Nonnull final RouteCallback route,
                            @Nullable final UpdateRouteCallback updateRoute,
-                           @Nullable final PostRouteCallback postRoute )
+                           @Nullable final PostRouteCallback postRoute,
+                           final boolean terminal )
   {
     assert priority >= 0;
     assert null != path;
@@ -99,6 +108,7 @@ public final class RouteDefinition
     _route = route;
     _updateRoute = updateRoute;
     _postRoute = postRoute;
+    _terminal = terminal;
   }
 
   @Nonnegative
@@ -141,6 +151,11 @@ public final class RouteDefinition
   public PostRouteCallback getPostRoute()
   {
     return _postRoute;
+  }
+
+  public boolean isTerminal()
+  {
+    return _terminal;
   }
 
   @SuppressWarnings( "ConstantConditions" )
