@@ -3,6 +3,7 @@ package router.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -20,20 +21,15 @@ public final class RouteManager
   private Route _lastRoute;
   private Object _callback;
 
-  public RouteManager( @Nonnull final RoutingBackend backend,
-                       @Nonnull final Object target )
+  public RouteManager( @Nonnull final RoutingBackend backend, @Nonnull final Object target )
   {
-    assert null != backend;
-    assert null != target;
-
-    _backend = backend;
-    _target = target;
+    _backend = Objects.requireNonNull( backend );
+    _target = Objects.requireNonNull( target );
   }
 
   public void addRoute( @Nonnull final RouteDefinition route )
   {
-    assert null != route;
-    _routes.add( route );
+    _routes.add( Objects.requireNonNull( route ) );
   }
 
   @Nullable
