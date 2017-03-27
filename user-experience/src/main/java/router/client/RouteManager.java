@@ -7,7 +7,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings( { "ConstantConditions", "WeakerAccess", "SameParameterValue" } )
+@SuppressWarnings( { "WeakerAccess" } )
 public final class RouteManager
 {
   private final RoutingBackend _backend;
@@ -90,11 +90,14 @@ public final class RouteManager
     for ( final RouteDefinition definition : _routes )
     {
       final Map<String, Object> routeData = definition.match( location );
-      final Route route = new Route( location, definition, routeData );
-      if ( null != routeData && processRoute( route ) )
+      if ( null != routeData )
       {
-        _lastRoute = route;
-        return route;
+        final Route route = new Route( location, definition, routeData );
+        if ( processRoute( route ) )
+        {
+          _lastRoute = route;
+          return route;
+        }
       }
     }
     return null;
@@ -102,19 +105,15 @@ public final class RouteManager
 
   private boolean processRoute( @Nonnull final Route route )
   {
-    assert null != route;
+    Objects.requireNonNull( route );
     final RouteDefinition definition = route.getDefinition();
     final PreRouteGuardCallback preRouteGuard = definition.getPreRouteGuard();
     if ( preRouteGuard == null || preRouteGuard.preRouteGuard( route ) )
     {
       if ( null != _lastRoute && _lastRoute.getDefinition() == definition )
       {
-        final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
-        if ( null != updateRoute )
-        {
-          updateRoute.updateRoute( route );
-          return true;
-        }
+        definition.getUpdateRoute().updateRoute( route );
+        return true;
       }
       final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
       if ( null != beforeRoute )
