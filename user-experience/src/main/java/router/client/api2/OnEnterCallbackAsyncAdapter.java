@@ -16,11 +16,9 @@ final class OnEnterCallbackAsyncAdapter
   }
 
   @Override
-  public void onEnter( @Nonnull final Route previousRoute,
-                       @Nonnull final Route nextRoute,
-                       @Nonnull final OnEnterControl control )
+  public void onEnter( @Nonnull final Route nextRoute, @Nonnull final OnEnterControl control )
   {
-    _callback.onEnter( previousRoute, nextRoute );
+    _callback.onEnter( nextRoute );
     control.continueProcessing();
   }
 }

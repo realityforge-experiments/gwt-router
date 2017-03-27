@@ -1,6 +1,7 @@
 package router.client.api2;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import router.client.Route;
 
 final class OnChangeCallbackAsyncAdapter
@@ -16,11 +17,11 @@ final class OnChangeCallbackAsyncAdapter
   }
 
   @Override
-  public void onChange( @Nonnull final Route previousRoute,
+  public void onChange( @Nullable String previousLocation,
                         @Nonnull Route nextRoute,
                         @Nonnull final OnChangeControl control )
   {
-    if ( _callback.onChange( previousRoute, nextRoute ) )
+    if ( _callback.onChange( previousLocation, nextRoute ) )
     {
       control.continueProcessing();
     }

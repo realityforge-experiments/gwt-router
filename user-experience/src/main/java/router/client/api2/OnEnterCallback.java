@@ -8,7 +8,7 @@ import router.client.Route;
 @FunctionalInterface
 public interface OnEnterCallback
 {
-  void onEnter( @Nonnull Route previousRoute, @Nonnull Route nextRoute );
+  void onEnter( @Nonnull Route nextRoute );
 
   default OnEnterCallbackAsync asAsync()
   {
