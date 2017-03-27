@@ -89,12 +89,12 @@ public final class RouteManager
     }
   }
 
-  private Route attemptRouteMatch( final String hash )
+  private Route attemptRouteMatch( final String location )
   {
     for ( final RouteDefinition definition : _routes )
     {
-      final Map<String, Object> routeData = definition.match( hash );
-      final Route route = new Route( definition, routeData );
+      final Map<String, Object> routeData = definition.match( location );
+      final Route route = new Route( location, definition, routeData );
       if ( null != routeData && processRoute( route ) )
       {
         _lastRoute = route;
