@@ -9,7 +9,6 @@ public final class RouteEntry<T>
   private final Route _route;
   private final T _callback;
 
-  @SuppressWarnings( "ConstantConditions" )
   public RouteEntry( @Nonnull final Route route, @Nonnull final T callback )
   {
     _route = Objects.requireNonNull( route );
