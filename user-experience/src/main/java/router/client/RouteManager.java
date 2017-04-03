@@ -89,10 +89,11 @@ public final class RouteManager
   {
     for ( final RouteDefinition definition : _routes )
     {
-      final Map<String, Object> routeData = definition.match( location );
+      final LocationDefinition locationDefinition = definition.getLocation();
+      final Map<String, Object> routeData = locationDefinition.getPattern().match( location );
       if ( null != routeData )
       {
-        final Route route = new Route( location, definition, routeData );
+        final Route route = new Route( new Location( location, locationDefinition, routeData ), definition );
         if ( processRoute( route ) )
         {
           _lastRoute = route;
@@ -107,12 +108,13 @@ public final class RouteManager
   {
     Objects.requireNonNull( route );
     final RouteDefinition definition = route.getDefinition();
-    final PreRouteGuardCallback preRouteGuard = definition.getPreRouteGuard();
-    if ( preRouteGuard == null || preRouteGuard.preRouteGuard( route ) )
+    final LocationGuardCallback preRouteGuard = definition.getLocation().getLocationGuard();
+    if ( preRouteGuard == null || preRouteGuard.matchLocation( route.getLocation() ) )
     {
-      if ( null != _lastRoute && _lastRoute.getDefinition() == definition )
+        final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
+      if ( null != updateRoute && null != _lastRoute && _lastRoute.getDefinition() == definition )
       {
-        definition.getUpdateRoute().updateRoute( route );
+        updateRoute.updateRoute( route );
         return true;
       }
       final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();

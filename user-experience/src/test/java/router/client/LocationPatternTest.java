@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-@PrepareForTest( { RouteDefinition.class, RegExp.class } )
-public class RouteDefinitionTest
+@PrepareForTest( { LocationPattern.class, RegExp.class } )
+public class LocationPatternTest
 {
   @ObjectFactory
   public IObjectFactory getObjectFactory()
@@ -37,7 +37,7 @@ public class RouteDefinitionTest
     final RegExp mock = PowerMockito.mock( RegExp.class );
     PowerMockito.whenNew( RegExp.class ).withArguments( eq( regex ) ).thenReturn( mock );
 
-    final RegExp re = RouteDefinition.pathToRegex( path );
+    final RegExp re = LocationPattern.pathToRegex( path );
 
     assertEquals( re, mock );
 

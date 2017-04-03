@@ -4,7 +4,7 @@ package router.client;
  * This callback is called to determine whether the application can begin transitioning to a new location.
  */
 @FunctionalInterface
-public interface PreRouteGuardCallback
+public interface LocationGuardCallback
 {
-  boolean preRouteGuard( Route route );
+  boolean matchLocation( Location Location );
 }
