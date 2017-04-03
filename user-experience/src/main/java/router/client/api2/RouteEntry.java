@@ -2,7 +2,7 @@ package router.client.api2;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.Route;
+import router.client.route.Route;
 
 public final class RouteEntry<T>
 {

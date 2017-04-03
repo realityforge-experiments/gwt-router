@@ -1,4 +1,4 @@
-package router.client;
+package router.client.route;
 
 /**
  * This callback is passed into transition callback and is invoked to indicate that transition is complete.

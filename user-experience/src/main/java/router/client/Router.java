@@ -7,6 +7,7 @@ import java.util.Objects;
 import router.client.location.LocationDefinition;
 import router.client.location.LocationPattern;
 import router.client.location.RegExp;
+import router.client.route.RouteDefinition;
 
 public final class Router
   implements EntryPoint

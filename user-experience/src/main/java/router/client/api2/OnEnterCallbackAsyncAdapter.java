@@ -1,7 +1,7 @@
 package router.client.api2;
 
 import javax.annotation.Nonnull;
-import router.client.Route;
+import router.client.route.Route;
 
 final class OnEnterCallbackAsyncAdapter
   implements OnEnterCallbackAsync

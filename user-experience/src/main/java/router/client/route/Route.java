@@ -1,4 +1,4 @@
-package router.client;
+package router.client.route;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;

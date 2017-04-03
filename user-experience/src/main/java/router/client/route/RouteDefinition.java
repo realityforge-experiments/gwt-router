@@ -1,8 +1,9 @@
-package router.client;
+package router.client.route;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import router.client.UpdateRouteCallback;
 import router.client.location.LocationDefinition;
 
 public final class RouteDefinition

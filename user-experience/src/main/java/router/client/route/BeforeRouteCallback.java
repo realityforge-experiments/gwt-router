@@ -1,4 +1,4 @@
-package router.client;
+package router.client.route;
 
 /**
  * This callback is called before a transition occurs to a new location and before any action is taken by

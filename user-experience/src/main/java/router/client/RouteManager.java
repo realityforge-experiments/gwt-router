@@ -9,6 +9,10 @@ import javax.annotation.Nullable;
 import router.client.location.Location;
 import router.client.location.LocationDefinition;
 import router.client.location.LocationGuardCallback;
+import router.client.route.BeforeRouteCallback;
+import router.client.route.PostRouteCallback;
+import router.client.route.Route;
+import router.client.route.RouteDefinition;
 
 @SuppressWarnings( { "WeakerAccess" } )
 public final class RouteManager
