@@ -3,6 +3,7 @@ package router.client;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import router.client.location.Location;
 
 public final class Route
 {

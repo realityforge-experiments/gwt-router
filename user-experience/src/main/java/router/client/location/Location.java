@@ -1,4 +1,4 @@
-package router.client;
+package router.client.location;
 
 import java.util.Map;
 import java.util.Objects;

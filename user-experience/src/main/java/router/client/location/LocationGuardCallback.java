@@ -1,4 +1,4 @@
-package router.client;
+package router.client.location;
 
 /**
  * This callback is called to determine whether the application can begin transitioning to a new location.

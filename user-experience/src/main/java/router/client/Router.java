@@ -4,6 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 import elemental2.Element;
 import elemental2.Global;
 import java.util.Objects;
+import router.client.location.LocationDefinition;
+import router.client.location.LocationPattern;
 
 public final class Router
   implements EntryPoint

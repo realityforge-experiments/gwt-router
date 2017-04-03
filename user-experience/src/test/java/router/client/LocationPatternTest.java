@@ -8,6 +8,7 @@ import org.testng.IObjectFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
+import router.client.location.LocationPattern;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
