@@ -1,4 +1,4 @@
-package router.client;
+package router.client.location;
 
 import jsinterop.annotations.JsPackage;
 import jsinterop.annotations.JsType;

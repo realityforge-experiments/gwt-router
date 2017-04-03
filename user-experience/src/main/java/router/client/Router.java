@@ -6,6 +6,7 @@ import elemental2.Global;
 import java.util.Objects;
 import router.client.location.LocationDefinition;
 import router.client.location.LocationPattern;
+import router.client.location.RegExp;
 
 public final class Router
   implements EntryPoint

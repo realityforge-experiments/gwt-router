@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.RegExp;
 
 public final class LocationPattern
 {
