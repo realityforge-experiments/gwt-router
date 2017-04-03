@@ -1,6 +1,5 @@
 package router.client;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -11,7 +10,7 @@ public interface RoutingBackend
   @FunctionalInterface
   interface HashChangeListener
   {
-    boolean onHashChange( @Nonnull String hash );
+    boolean onHashChange( @Nullable String hash );
   }
   /**
    * Return the hash indicating the
