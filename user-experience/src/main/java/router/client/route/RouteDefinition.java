@@ -16,20 +16,16 @@ public final class RouteDefinition
   private final RouteCallback _route;
   @Nullable
   private final UpdateRouteCallback _updateRoute;
-  @Nullable
-  private final PostRouteCallback _postRoute;
 
   public RouteDefinition( @Nonnull final LocationDefinition location,
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
-                          @Nullable final UpdateRouteCallback updateRoute,
-                          @Nullable final PostRouteCallback postRoute )
+                          @Nullable final UpdateRouteCallback updateRoute )
   {
     _location = Objects.requireNonNull( location );
     _beforeRoute = beforeRoute;
     _route = Objects.requireNonNull( route );
     _updateRoute = updateRoute;
-    _postRoute = postRoute;
   }
 
   @Nonnull
@@ -54,11 +50,5 @@ public final class RouteDefinition
   public UpdateRouteCallback getUpdateRoute()
   {
     return _updateRoute;
-  }
-
-  @Nullable
-  public PostRouteCallback getPostRoute()
-  {
-    return _postRoute;
   }
 }

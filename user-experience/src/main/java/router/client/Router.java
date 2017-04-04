@@ -31,12 +31,10 @@ public final class Router
         new RouteDefinition( new LocationDefinition( new LocationPattern( "/" ), null ),
                              null,
                              ( route, element ) -> route2( element, "/" ),
-                             null,
                              null ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( "/foo" ), null ),
                              null,
                              ( route, element ) -> route2( element, "/foo" ),
-                             null,
                              null ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)/(\\d+)$" ),
                                                                           new String[]{ "bazID", "buzID" } ), null ),
@@ -46,36 +44,33 @@ public final class Router
                                                            route.getData( "bazID" ) +
                                                            "/" +
                                                            route.getData( "buzID" ) ),
-                             null,
                              null ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)$" ),
                                                                           new String[]{ "bazID" } ),
                                                      ( route -> Objects.equals( route.getData( "bazID" ), "42" ) ) ),
                              null,
                              ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
-                             null,
                              null ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/biz/(\\d+)$" ),
                                                                           new String[]{ "bazID" } ),
                                                      ( route -> Objects.equals( route.getData( "bazID" ), "42" ) ) ),
                              null,
                              ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
-                             null,
-                             ( route -> info( "PostRoute " + route ) ) ),
+                             null ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/ding/(\\d+)$" ),
                                                                           new String[]{ "bazID" } ),
                                                      null ),
                              null,
                              ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
                              route -> route2( Global.document.getElementById( "hook" ),
-                                              "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ),
-                             null ),
+                                              "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ) ),
         new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/end$" ), new String[ 0 ] ),
                                                      null ), null, ( route, element ) ->
                              {
                                route2( element, "/end" );
                                _routeManager.uninstall();
-                             }, null, null ),
+                             },
+                             null ),
         };
 
     final boolean useElemental = true;
