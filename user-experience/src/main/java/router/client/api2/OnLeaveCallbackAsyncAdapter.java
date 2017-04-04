@@ -1,24 +1,23 @@
 package router.client.api2;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.route.Route;
+import router.client.location.Location;
 
 class OnLeaveCallbackAsyncAdapter
   implements OnLeaveCallbackAsync
 {
   private final OnLeaveCallback _callback;
 
-  @SuppressWarnings( "ConstantConditions" )
   OnLeaveCallbackAsyncAdapter( @Nonnull final OnLeaveCallback callback )
   {
-    assert null != callback;
-    _callback = callback;
+    _callback = Objects.requireNonNull( callback );
   }
 
   @Override
-  public void onLeave( @Nonnull final Route route, @Nonnull final OnLeaveControl control )
+  public void onLeave( @Nonnull final Location location, @Nonnull final OnLeaveControl control )
   {
-    _callback.onLeave( route );
+    _callback.onLeave( location );
     control.continueProcessing();
   }
 }

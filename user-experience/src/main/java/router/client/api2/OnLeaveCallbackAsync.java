@@ -2,11 +2,11 @@ package router.client.api2;
 
 import javax.annotation.Nonnull;
 import jsinterop.annotations.JsFunction;
-import router.client.route.Route;
+import router.client.location.Location;
 
 @JsFunction
 @FunctionalInterface
 public interface OnLeaveCallbackAsync
 {
-  void onLeave( @Nonnull Route route, @Nonnull OnLeaveControl control );
+  void onLeave( @Nonnull Location location, @Nonnull OnLeaveControl control );
 }

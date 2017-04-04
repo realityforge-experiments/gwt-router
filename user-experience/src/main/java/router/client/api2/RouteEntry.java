@@ -2,23 +2,23 @@ package router.client.api2;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.route.Route;
+import router.client.location.Location;
 
 public final class RouteEntry<T>
 {
-  private final Route _route;
+  private final Location _location;
   private final T _callback;
 
-  public RouteEntry( @Nonnull final Route route, @Nonnull final T callback )
+  public RouteEntry( @Nonnull final Location location, @Nonnull final T callback )
   {
-    _route = Objects.requireNonNull( route );
+    _location = Objects.requireNonNull( location );
     _callback = Objects.requireNonNull( callback );
   }
 
   @Nonnull
-  public Route getRoute()
+  public Location getLocation()
   {
-    return _route;
+    return _location;
   }
 
   public T getCallback()

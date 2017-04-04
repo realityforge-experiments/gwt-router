@@ -28,7 +28,7 @@ public final class OnEnterCallbackChain
     else
     {
       final RouteEntry<OnEnterCallbackAsync> entry = _chain.get( index );
-      entry.getCallback().onEnter( entry.getRoute(), new OnEnterControl()
+      entry.getCallback().onEnter( entry.getLocation(), new OnEnterControl()
       {
         @Override
         public void continueProcessing()

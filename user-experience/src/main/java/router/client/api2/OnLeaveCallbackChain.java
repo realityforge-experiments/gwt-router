@@ -28,7 +28,7 @@ public final class OnLeaveCallbackChain
     else
     {
       final RouteEntry<OnLeaveCallbackAsync> entry = _chain.get( index );
-      entry.getCallback().onLeave( entry.getRoute(), new OnLeaveControl()
+      entry.getCallback().onLeave( entry.getLocation(), new OnLeaveControl()
       {
         @Override
         public void continueProcessing()

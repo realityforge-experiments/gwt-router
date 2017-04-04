@@ -1,24 +1,23 @@
 package router.client.api2;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.route.Route;
+import router.client.location.Location;
 
 final class OnEnterCallbackAsyncAdapter
   implements OnEnterCallbackAsync
 {
   private final OnEnterCallback _callback;
 
-  @SuppressWarnings( "ConstantConditions" )
   OnEnterCallbackAsyncAdapter( @Nonnull final OnEnterCallback callback )
   {
-    assert null != callback;
-    _callback = callback;
+    _callback = Objects.requireNonNull( callback );
   }
 
   @Override
-  public void onEnter( @Nonnull final Route nextRoute, @Nonnull final OnEnterControl control )
+  public void onEnter( @Nonnull final Location nextLocation, @Nonnull final OnEnterControl control )
   {
-    _callback.onEnter( nextRoute );
+    _callback.onEnter( nextLocation );
     control.continueProcessing();
   }
 }

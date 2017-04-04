@@ -1,27 +1,26 @@
 package router.client.api2;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.route.Route;
+import router.client.location.Location;
 
 final class OnChangeCallbackAsyncAdapter
   implements OnChangeCallbackAsync
 {
   private final OnChangeCallback _callback;
 
-  @SuppressWarnings( "ConstantConditions" )
   OnChangeCallbackAsyncAdapter( @Nonnull final OnChangeCallback callback )
   {
-    assert null != callback;
-    _callback = callback;
+    _callback = Objects.requireNonNull( callback );
   }
 
   @Override
   public void onChange( @Nullable String previousLocation,
-                        @Nonnull Route nextRoute,
+                        @Nonnull Location nextLocation,
                         @Nonnull final OnChangeControl control )
   {
-    if ( _callback.onChange( previousLocation, nextRoute ) )
+    if ( _callback.onChange( previousLocation, nextLocation ) )
     {
       control.continueProcessing();
     }
