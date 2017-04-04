@@ -36,11 +36,11 @@ public class RouteManager
                              collectOnEnterCallbacks( newLocation ).onEnter( () -> runIfNonNull( routingCompleteAction ) ) ) );
   }
 
-  private void runIfNonNull( @Nullable final Runnable routingCompleteAction )
+  private void runIfNonNull( @Nullable final Runnable action )
   {
-    if ( null != routingCompleteAction )
+    if ( null != action )
     {
-      routingCompleteAction.run();
+      action.run();
     }
   }
 }
