@@ -1,4 +1,4 @@
-package router.client;
+package router.client.backend;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.History;

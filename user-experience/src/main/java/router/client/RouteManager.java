@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import router.client.backend.RoutingBackend;
 import router.client.location.Location;
 import router.client.location.LocationDefinition;
 import router.client.location.LocationGuardCallback;
