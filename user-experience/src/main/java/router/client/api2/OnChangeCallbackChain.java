@@ -16,20 +16,20 @@ public final class OnChangeCallbackChain
   }
 
   public void onChange( @Nullable final String previousLocation,
-                        @Nonnull final Runnable abortRoute,
-                        @Nonnull final Runnable continueRoute )
+                        @Nonnull final Runnable abortAction,
+                        @Nonnull final Runnable nextAction )
   {
-    onChange( previousLocation, abortRoute, continueRoute, 0 );
+    onChange( previousLocation, abortAction, nextAction, 0 );
   }
 
   private void onChange( @Nullable final String previousLocation,
-                         @Nonnull final Runnable abortRoute,
-                         @Nonnull final Runnable continueRoute,
+                         @Nonnull final Runnable abortAction,
+                         @Nonnull final Runnable nextAction,
                          final int index )
   {
     if ( index >= _chain.size() )
     {
-      continueRoute.run();
+      nextAction.run();
     }
     else
     {
@@ -39,13 +39,19 @@ public final class OnChangeCallbackChain
         @Override
         public void abort()
         {
-          abortRoute.run();
+          abortAction.run();
+        }
+
+        @Override
+        public void halt()
+        {
+          nextAction.run();
         }
 
         @Override
         public void proceed()
         {
-          onChange( previousLocation, abortRoute, continueRoute, index + 1 );
+          onChange( previousLocation, abortAction, nextAction, index + 1 );
         }
       } );
     }
