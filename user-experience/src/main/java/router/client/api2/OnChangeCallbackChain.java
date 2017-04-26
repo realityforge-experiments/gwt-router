@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 public final class OnChangeCallbackChain
 {
   @Nonnull
-  private final List<RouteEntry<OnChangeCallbackAsync>> _chain;
+  private final List<RouteEntry<OnChangeCallbackAsync>> _elements;
 
-  public OnChangeCallbackChain( @Nonnull final List<RouteEntry<OnChangeCallbackAsync>> chain )
+  public OnChangeCallbackChain( @Nonnull final List<RouteEntry<OnChangeCallbackAsync>> elements )
   {
-    _chain = Objects.requireNonNull( chain );
+    _elements = Objects.requireNonNull( elements );
   }
 
   public void onChange( @Nullable final String previousLocation,
@@ -27,13 +27,13 @@ public final class OnChangeCallbackChain
                          @Nonnull final Runnable nextAction,
                          final int index )
   {
-    if ( index >= _chain.size() )
+    if ( index >= _elements.size() )
     {
       nextAction.run();
     }
     else
     {
-      final RouteEntry<OnChangeCallbackAsync> entry = _chain.get( index );
+      final RouteEntry<OnChangeCallbackAsync> entry = _elements.get( index );
       entry.getCallback().onChange( previousLocation, entry.getLocation(), new OnChangeControl()
       {
         @Override

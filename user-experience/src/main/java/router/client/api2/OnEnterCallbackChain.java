@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 public final class OnEnterCallbackChain
 {
   @Nonnull
-  private final List<RouteEntry<OnEnterCallbackAsync>> _chain;
+  private final List<RouteEntry<OnEnterCallbackAsync>> _elements;
 
-  public OnEnterCallbackChain( @Nonnull final List<RouteEntry<OnEnterCallbackAsync>> chain )
+  public OnEnterCallbackChain( @Nonnull final List<RouteEntry<OnEnterCallbackAsync>> elements )
   {
-    _chain = Objects.requireNonNull( chain );
+    _elements = Objects.requireNonNull( elements );
   }
 
   public void onEnter( @Nonnull final Runnable nextAction )
@@ -21,13 +21,13 @@ public final class OnEnterCallbackChain
 
   private void onEnter( @Nonnull final Runnable nextAction, final int index )
   {
-    if ( index >= _chain.size() )
+    if ( index >= _elements.size() )
     {
       nextAction.run();
     }
     else
     {
-      final RouteEntry<OnEnterCallbackAsync> entry = _chain.get( index );
+      final RouteEntry<OnEnterCallbackAsync> entry = _elements.get( index );
       entry.getCallback().onEnter( entry.getLocation(), new OnEnterControl()
       {
         @Override
