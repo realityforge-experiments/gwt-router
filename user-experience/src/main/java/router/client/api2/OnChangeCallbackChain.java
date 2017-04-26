@@ -37,13 +37,13 @@ public final class OnChangeCallbackChain
       entry.getCallback().onChange( previousLocation, entry.getLocation(), new OnChangeControl()
       {
         @Override
-        public void abortChange()
+        public void abort()
         {
           abortRoute.run();
         }
 
         @Override
-        public void continueProcessing()
+        public void proceed()
         {
           onChange( previousLocation, abortRoute, continueRoute, index + 1 );
         }

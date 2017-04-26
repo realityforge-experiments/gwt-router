@@ -18,6 +18,6 @@ final class OnEnterCallbackAsyncAdapter
   public void onEnter( @Nonnull final Location nextLocation, @Nonnull final OnEnterControl control )
   {
     _callback.onEnter( nextLocation );
-    control.continueProcessing();
+    control.proceed();
   }
 }

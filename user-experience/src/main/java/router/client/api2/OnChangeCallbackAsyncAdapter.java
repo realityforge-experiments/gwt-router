@@ -22,11 +22,11 @@ final class OnChangeCallbackAsyncAdapter
   {
     if ( _callback.onChange( previousLocation, nextLocation ) )
     {
-      control.continueProcessing();
+      control.proceed();
     }
     else
     {
-      control.abortChange();
+      control.abort();
     }
   }
 }

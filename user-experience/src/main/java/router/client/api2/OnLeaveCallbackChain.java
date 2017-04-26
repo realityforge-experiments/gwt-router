@@ -31,9 +31,15 @@ public final class OnLeaveCallbackChain
       entry.getCallback().onLeave( entry.getLocation(), new OnLeaveControl()
       {
         @Override
-        public void continueProcessing()
+        public void proceed()
         {
           onLeave( nextAction, index + 1 );
+        }
+
+        @Override
+        public void halt()
+        {
+          nextAction.run();
         }
       } );
     }

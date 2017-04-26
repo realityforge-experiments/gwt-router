@@ -18,6 +18,6 @@ class OnLeaveCallbackAsyncAdapter
   public void onLeave( @Nonnull final Location location, @Nonnull final OnLeaveControl control )
   {
     _callback.onLeave( location );
-    control.continueProcessing();
+    control.proceed();
   }
 }

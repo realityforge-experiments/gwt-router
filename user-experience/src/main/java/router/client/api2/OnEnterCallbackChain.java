@@ -31,13 +31,13 @@ public final class OnEnterCallbackChain
       entry.getCallback().onEnter( entry.getLocation(), new OnEnterControl()
       {
         @Override
-        public void continueProcessing()
+        public void proceed()
         {
           onEnter( nextAction, index + 1 );
         }
 
         @Override
-        public void stopProcessing()
+        public void halt()
         {
           nextAction.run();
         }
