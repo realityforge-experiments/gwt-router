@@ -11,6 +11,11 @@ public final class LocationDefinition
   @Nullable
   private final LocationGuardCallback _locationGuard;
 
+  public LocationDefinition( @Nonnull final LocationPattern pattern )
+  {
+    this( pattern, null );
+  }
+
   public LocationDefinition( @Nonnull final LocationPattern pattern,
                              @Nullable final LocationGuardCallback locationGuard )
   {
