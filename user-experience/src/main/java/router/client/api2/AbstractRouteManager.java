@@ -16,11 +16,12 @@ public abstract class AbstractRouteManager
 
   public void route( @Nullable final String previousLocation,
                      @Nonnull final String newLocation,
-                     @Nullable final Runnable routingCompleteAction )
+                     @Nullable final Runnable routingCompleteAction,
+                     @Nullable final Runnable routingAbortedAction )
   {
     collectOnChangeCallbacks( newLocation ).
       onChange( previousLocation,
-                () -> runIfNonNull( routingCompleteAction ),
+                () -> runIfNonNull( routingAbortedAction ),
                 () -> collectOnLeaveCallbacks( previousLocation ).
                   onLeave( () ->
                              collectOnEnterCallbacks( newLocation ).onEnter( () -> runIfNonNull( routingCompleteAction ) ) ) );
