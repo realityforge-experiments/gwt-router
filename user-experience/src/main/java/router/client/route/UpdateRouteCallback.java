@@ -1,6 +1,4 @@
-package router.client;
-
-import router.client.route.Route;
+package router.client.route;
 
 /**
  * This callback is used if the definition is the same but parameters have changed.

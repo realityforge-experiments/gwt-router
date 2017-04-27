@@ -13,6 +13,7 @@ import router.client.location.LocationGuardCallback;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route;
 import router.client.route.RouteDefinition;
+import router.client.route.UpdateRouteCallback;
 
 @SuppressWarnings( { "WeakerAccess" } )
 public final class RouteManager
