@@ -42,6 +42,7 @@ includes one or more callbacks that can be added to the respective phases.
 
 ## TODO:
 
+* If router parameters are mapped to fields then updating fields should update url.
 * Route callbacks can be sync or async. Optional parameter indicating the variety.
 * Routes may not terminate the search. i.e. A Route may "match" but all it does is add hooks and let matching continue.
 * Start to document router.
