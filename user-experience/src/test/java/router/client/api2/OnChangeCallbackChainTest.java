@@ -2,8 +2,6 @@ package router.client.api2;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import javax.annotation.Nonnull;
 import org.realityforge.guiceyloops.shared.ValueUtil;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
@@ -34,9 +32,9 @@ public final class OnChangeCallbackChainTest
   {
     final AtomicInteger count = new AtomicInteger();
     final ArrayList<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
     final Runnable abortAction = mock( Runnable.class );
@@ -55,10 +53,10 @@ public final class OnChangeCallbackChainTest
   {
     final AtomicInteger count = new AtomicInteger();
     final ArrayList<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::halt ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::halt ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
     final Runnable abortAction = mock( Runnable.class );
@@ -77,10 +75,10 @@ public final class OnChangeCallbackChainTest
   {
     final AtomicInteger count = new AtomicInteger();
     final ArrayList<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, OnChangeControl::abort ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, OnChangeControl::abort ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
     final Runnable abortAction = mock( Runnable.class );
@@ -99,10 +97,10 @@ public final class OnChangeCallbackChainTest
   {
     final AtomicInteger count = new AtomicInteger();
     final ArrayList<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::proceed ) );
-    elements.add( newEntry( count, ChainControl::halt ) );
-    elements.add( newEntry( count, OnChangeControl::abort ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::halt ) );
+    elements.add( FactoryUtil.createOnChangeCallbackAsync( count, OnChangeControl::abort ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
     final Runnable abortAction = mock( Runnable.class );
@@ -114,16 +112,5 @@ public final class OnChangeCallbackChainTest
     verify( nextAction ).run();
 
     assertEquals( count.intValue(), 3 );
-  }
-
-  @Nonnull
-  private RouteEntry<OnChangeCallbackAsync> newEntry( @Nonnull final AtomicInteger count,
-                                                      @Nonnull final Consumer<OnChangeControl> callback )
-  {
-    return new RouteEntry<>( FactoryUtil.createLocation(), ( p, l, c ) ->
-    {
-      count.incrementAndGet();
-      callback.accept( c );
-    } );
   }
 }
