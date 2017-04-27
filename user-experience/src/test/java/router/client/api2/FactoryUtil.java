@@ -1,6 +1,8 @@
 package router.client.api2;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
@@ -57,5 +59,44 @@ final class FactoryUtil
       count.incrementAndGet();
       callback.accept( c );
     } );
+  }
+
+  @SafeVarargs
+  @Nonnull
+  static OnChangeCallbackChain createOnChangeCallbackChain( @Nonnull final AtomicInteger count,
+                                                            @Nonnull final Consumer<OnChangeControl>... actions )
+  {
+    final List<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
+    for ( final Consumer<OnChangeControl> action : actions )
+    {
+      elements.add( createOnChangeCallbackAsync( count, action ) );
+    }
+    return new OnChangeCallbackChain( elements );
+  }
+
+  @SafeVarargs
+  @Nonnull
+  static OnEnterCallbackChain createOnEnterCallbackChain( @Nonnull final AtomicInteger count,
+                                                          @Nonnull final Consumer<OnEnterControl>... actions )
+  {
+    final List<RouteEntry<OnEnterCallbackAsync>> elements = new ArrayList<>();
+    for ( final Consumer<OnEnterControl> action : actions )
+    {
+      elements.add( createOnEnterCallbackAsync( count, action ) );
+    }
+    return new OnEnterCallbackChain( elements );
+  }
+
+  @SafeVarargs
+  @Nonnull
+  static OnLeaveCallbackChain createOnLeaveCallbackChain( @Nonnull final AtomicInteger count,
+                                                          @Nonnull final Consumer<OnLeaveControl>... actions )
+  {
+    final List<RouteEntry<OnLeaveCallbackAsync>> elements = new ArrayList<>();
+    for ( final Consumer<OnLeaveControl> action : actions )
+    {
+      elements.add( createOnLeaveCallbackAsync( count, action ) );
+    }
+    return new OnLeaveCallbackChain( elements );
   }
 }
