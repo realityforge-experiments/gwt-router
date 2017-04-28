@@ -34,6 +34,6 @@ public final class Route
   @Nullable
   public <T> T getData( @Nonnull final String key )
   {
-    return getLocation().getData( key );
+    return getLocation().getParameter( key );
   }
 }

@@ -12,15 +12,15 @@ public final class Location
   @Nonnull
   private final LocationDefinition _definition;
   @Nonnull
-  private final Map<String, Object> _routeData;
+  private final Map<String, Object> _parameters;
 
   public Location( @Nonnull final String location,
                    @Nonnull final LocationDefinition definition,
-                   @Nonnull final Map<String, Object> routeData )
+                   @Nonnull final Map<String, Object> parameters )
   {
     _location = Objects.requireNonNull( location );
     _definition = Objects.requireNonNull( definition );
-    _routeData = Objects.requireNonNull( routeData );
+    _parameters = Objects.requireNonNull( parameters );
   }
 
   @Nonnull
@@ -37,14 +37,14 @@ public final class Location
 
   @SuppressWarnings( "unchecked" )
   @Nullable
-  public <T> T getData( @Nonnull final String key )
+  public <T> T getParameter( @Nonnull final String key )
   {
-    return (T) getRouteData().get( key );
+    return (T) getParameters().get( key );
   }
 
   @Nonnull
-  public Map<String, Object> getRouteData()
+  public Map<String, Object> getParameters()
   {
-    return _routeData;
+    return _parameters;
   }
 }
