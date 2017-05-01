@@ -58,7 +58,7 @@ public final class LocationPattern
   @Nonnull
   String toKey( final int paramIndex )
   {
-    return _parameterKeys == null || _parameterKeys.length <= paramIndex || null == _parameterKeys[ paramIndex ] ?
+    return null == _parameterKeys || _parameterKeys.length <= paramIndex || null == _parameterKeys[ paramIndex ] ?
            "p" + paramIndex :
            _parameterKeys[ paramIndex ];
   }
