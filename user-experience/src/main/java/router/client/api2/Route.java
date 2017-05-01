@@ -1,13 +1,10 @@
-package router.client.location;
+package router.client.api2;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.api2.OnChangeCallbackAsync;
-import router.client.api2.OnEnterCallbackAsync;
-import router.client.api2.OnLeaveCallbackAsync;
 
 public final class Route
 {
@@ -86,8 +83,7 @@ public final class Route
     _onChange = onChange;
   }
 
-  @Nullable
-  public LocationMatch match( @Nonnull final String location )
+  public boolean match( @Nonnull final RouteContext context, @Nonnull final String location )
   {
     Objects.requireNonNull( location );
     final String[] groups = _matcher.exec( location );
@@ -105,16 +101,17 @@ public final class Route
       }
       if ( null == _guard || _guard.shouldMatch( location, this, matchData ) )
       {
-        return new LocationMatch( location, this, matchData );
+        context.getParameters().putAll( matchData );
+        return true;
       }
       else
       {
-        return null;
+        return false;
       }
     }
     else
     {
-      return null;
+      return false;
     }
   }
 

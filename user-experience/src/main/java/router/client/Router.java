@@ -7,8 +7,8 @@ import java.util.Objects;
 import router.client.backend.Elemental2RoutingBackend;
 import router.client.backend.GwtFrameworkRoutingBackend;
 import router.client.backend.RoutingBackend;
-import router.client.location.Route;
-import router.client.location.RegExp;
+import router.client.api2.RegExp;
+import router.client.api2.Route;
 import router.client.route.RouteDefinition;
 
 public final class Router

@@ -3,7 +3,6 @@ package router.client.api2;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.location.Route;
 
 final class OnChangeCallbackAsyncAdapter
   implements OnChangeCallbackAsync

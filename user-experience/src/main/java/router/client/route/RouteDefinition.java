@@ -3,7 +3,7 @@ package router.client.route;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.location.Route;
+import router.client.api2.Route;
 
 public final class RouteDefinition
 {

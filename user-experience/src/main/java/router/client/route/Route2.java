@@ -3,26 +3,25 @@ package router.client.route;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.location.LocationMatch;
+import router.client.api2.RouteContext;
 
 public final class Route2
 {
   @Nonnull
-  private final LocationMatch _match;
+  private final RouteContext _context;
   @Nonnull
   private final RouteDefinition _definition;
 
-  public Route2( @Nonnull final LocationMatch match, @Nonnull final RouteDefinition definition )
+  public Route2( @Nonnull final RouteContext match, @Nonnull final RouteDefinition definition )
   {
-    assert Objects.equals( match.getPattern(), definition.getLocation() );
-    _match = Objects.requireNonNull( match );
+    _context = Objects.requireNonNull( match );
     _definition = Objects.requireNonNull( definition );
   }
 
   @Nonnull
-  public LocationMatch getMatch()
+  public RouteContext getContext()
   {
-    return _match;
+    return _context;
   }
 
   @Nonnull
@@ -35,6 +34,6 @@ public final class Route2
   @Nullable
   public <T> T getData( @Nonnull final String key )
   {
-    return (T) getMatch().getParameters().get( key );
+    return (T) getContext().getParameters().get( key );
   }
 }

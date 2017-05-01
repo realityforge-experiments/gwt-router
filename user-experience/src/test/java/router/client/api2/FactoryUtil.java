@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-import router.client.location.Route;
-import router.client.location.TestRegExp;
 
 final class FactoryUtil
 {

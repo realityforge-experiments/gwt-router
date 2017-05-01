@@ -2,8 +2,6 @@ package router.client.api2;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.location.LocationMatch;
-import router.client.location.Route;
 
 public final class RouteEntry<T>
 {

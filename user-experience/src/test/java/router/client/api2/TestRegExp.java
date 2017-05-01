@@ -1,6 +1,7 @@
-package router.client.location;
+package router.client.api2;
 
 import javax.annotation.Nonnull;
+import router.client.api2.RegExp;
 
 public class TestRegExp
   extends RegExp

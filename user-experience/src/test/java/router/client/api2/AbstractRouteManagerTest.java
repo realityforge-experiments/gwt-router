@@ -1,8 +1,9 @@
 package router.client.api2;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.realityforge.guiceyloops.shared.ValueUtil;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
@@ -36,9 +37,9 @@ public class AbstractRouteManagerTest
     final String newLocation = ValueUtil.randomString();
     rm.route( previousLocation, newLocation, context, nextAction, abortAction );
 
-    assertEquals( rm._onChangeLocation, newLocation );
-    assertEquals( rm._onEnterLocation, newLocation );
-    assertEquals( rm._onLeaveLocation, previousLocation );
+    assertEquals( rm._onChangeLocation, Boolean.TRUE );
+    assertEquals( rm._onEnterLocation, Boolean.TRUE );
+    assertEquals( rm._onLeaveLocation, Boolean.TRUE );
 
     assertEquals( onChangeCount.intValue(), 2 );
     assertEquals( onEnterCount.intValue(), 2 );
@@ -74,7 +75,7 @@ public class AbstractRouteManagerTest
     final String newLocation = ValueUtil.randomString();
     rm.route( previousLocation, newLocation, context, nextAction, abortAction );
 
-    assertEquals( rm._onChangeLocation, newLocation );
+    assertEquals( rm._onChangeLocation, Boolean.TRUE );
     assertNull( rm._onEnterLocation, newLocation );
     assertNull( rm._onLeaveLocation, previousLocation );
 
@@ -92,31 +93,38 @@ public class AbstractRouteManagerTest
     private OnChangeCallbackChain _onChangeCallbackChain;
     private OnEnterCallbackChain _onEnterCallbackChain;
     private OnLeaveCallbackChain _onLeaveCallbackChain;
-    private String _onChangeLocation;
-    private String _onEnterLocation;
-    private String _onLeaveLocation;
+    private Boolean _onChangeLocation;
+    private Boolean _onEnterLocation;
+    private Boolean _onLeaveLocation;
 
     @Nonnull
     @Override
-    protected OnChangeCallbackChain collectOnChangeCallbacks( @Nonnull final String location )
+    protected List<Route> getRoutes()
     {
-      _onChangeLocation = location;
+      return new ArrayList<>();
+    }
+
+    @Nonnull
+    @Override
+    protected OnChangeCallbackChain collectOnChangeCallbacks( @Nonnull final List<Route> routes )
+    {
+      _onChangeLocation = true;
       return _onChangeCallbackChain;
     }
 
     @Nonnull
     @Override
-    protected OnEnterCallbackChain collectOnEnterCallbacks( @Nonnull final String location )
+    protected OnEnterCallbackChain collectOnEnterCallbacks( @Nonnull final List<Route> routes )
     {
-      _onEnterLocation = location;
+      _onEnterLocation = true;
       return _onEnterCallbackChain;
     }
 
     @Nonnull
     @Override
-    protected OnLeaveCallbackChain collectOnLeaveCallbacks( @Nullable final String location )
+    protected OnLeaveCallbackChain collectOnLeaveCallbacks( @Nonnull final List<Route> routes )
     {
-      _onLeaveLocation = location;
+      _onLeaveLocation = true;
       return _onLeaveCallbackChain;
     }
   }

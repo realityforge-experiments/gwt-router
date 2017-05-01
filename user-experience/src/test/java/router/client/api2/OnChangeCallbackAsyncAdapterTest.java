@@ -2,7 +2,6 @@ package router.client.api2;
 
 import org.realityforge.guiceyloops.shared.ValueUtil;
 import org.testng.annotations.Test;
-import router.client.location.Route;
 import static org.mockito.Mockito.*;
 
 public final class OnChangeCallbackAsyncAdapterTest

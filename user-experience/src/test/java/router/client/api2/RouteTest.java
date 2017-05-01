@@ -1,4 +1,4 @@
-package router.client.location;
+package router.client.api2;
 
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -34,11 +34,11 @@ public class RouteTest
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
     final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
-    final LocationMatch match = pattern.match( location );
-    assertNotNull( match );
-    assertEquals( match.getLocation(), location );
-    assertEquals( match.getPattern(), pattern );
-    final Map<String, Object> matchData = match.getParameters();
+
+    final RouteContextImpl context = new RouteContextImpl( location );
+    assertTrue( pattern.match( context, location ) );
+
+    final Map<String, Object> matchData = context.getParameters();
     assertEquals( matchData.size(), 3 );
     assertEquals( matchData.get( "param0" ), "a" );
     assertEquals( matchData.get( "p1" ), "b" );
@@ -55,7 +55,11 @@ public class RouteTest
     final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
     when( guard.shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) ) ).
       thenReturn( false );
-    assertNull( pattern.match( location ) );
+
+    final RouteContextImpl context = new RouteContextImpl( location );
+    assertFalse( pattern.match( context, location ) );
+
+    assertEquals( context.getParameters().size(), 0 );
 
     verify( guard ).shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) );
   }
@@ -72,11 +76,11 @@ public class RouteTest
       return true;
     };
     final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
-    final LocationMatch match = pattern.match( location );
-    assertNotNull( match );
-    assertEquals( match.getLocation(), location );
-    assertEquals( match.getPattern(), pattern );
-    final Map<String, Object> matchData = match.getParameters();
+
+    final RouteContextImpl context = new RouteContextImpl( location );
+    assertTrue( pattern.match( context, location ) );
+
+    final Map<String, Object> matchData = context.getParameters();
     assertEquals( matchData.size(), 1 );
     assertEquals( matchData.get( "param0" ), 1 );
   }
@@ -88,20 +92,23 @@ public class RouteTest
     final String[] results = { location };
     final String[] parameterKeys = {};
     final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
-    final LocationMatch match = pattern.match( location );
-    assertNotNull( match );
-    assertEquals( match.getLocation(), location );
-    assertEquals( match.getPattern(), pattern );
-    final Map<String, Object> matchData = match.getParameters();
-    assertNotNull( matchData );
-    assertEquals( matchData.size(), 0 );
+
+    final RouteContextImpl context = new RouteContextImpl( location );
+    assertTrue( pattern.match( context, location ) );
+
+    assertEquals( context.getParameters().size(), 0 );
   }
 
   @Test
   public void match_noMatch()
   {
     final Route pattern = new Route( new TestRegExp(), new String[]{} );
-    assertNull( pattern.match( ValueUtil.randomString() ) );
+    final String location = ValueUtil.randomString();
+
+    final RouteContextImpl context = new RouteContextImpl( location );
+    assertFalse( pattern.match( context, location ) );
+
+    assertEquals( context.getParameters().size(), 0 );
   }
 
   @Test

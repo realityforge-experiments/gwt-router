@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import router.client.api2.Route;
+import router.client.api2.RouteContextImpl;
 import router.client.backend.RoutingBackend;
-import router.client.location.LocationMatch;
-import router.client.location.Route;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route2;
 import router.client.route.RouteDefinition;
@@ -96,10 +96,10 @@ public final class RouteManager
     for ( final RouteDefinition definition : _routes )
     {
       final Route pattern = definition.getLocation();
-      final LocationMatch match = pattern.match( location );
-      if ( null != match )
+      final RouteContextImpl context = new RouteContextImpl( location );
+      if ( pattern.match( context, location ) )
       {
-        final Route2 route = new Route2( match, definition );
+        final Route2 route = new Route2( context, definition );
         if ( processRoute( route ) )
         {
           _lastRoute = route;
