@@ -15,12 +15,12 @@ public final class LocationPattern
 
   public LocationPattern( @Nonnull final String path )
   {
-    this( pathToRegex( path ), new String[ 0 ] );
+    this( new RegExp( pathToPattern( path ) ), new String[ 0 ] );
   }
 
-  static RegExp pathToRegex( @Nonnull final String path )
+  static String pathToPattern( final @Nonnull String path )
   {
-    return new RegExp( "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$" );
+    return "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
   }
 
   public LocationPattern( @Nonnull final RegExp matcher,

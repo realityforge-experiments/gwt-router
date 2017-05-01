@@ -1,25 +1,12 @@
 package router.client.location;
 
 import javax.annotation.Nonnull;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockObjectFactory;
-import org.testng.IObjectFactory;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
-import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-@PrepareForTest( { LocationPattern.class, RegExp.class } )
 public class LocationPatternTest
 {
-  @ObjectFactory
-  public IObjectFactory getObjectFactory()
-  {
-    return new PowerMockObjectFactory();
-  }
-
   @DataProvider( name = "pathToRegex" )
   public static Object[][] pathToRegexData()
   {
@@ -31,16 +18,9 @@ public class LocationPatternTest
   }
 
   @Test( dataProvider = "pathToRegex" )
-  public void pathToRegex( @Nonnull final String path, @Nonnull final String regex )
+  public void pathToPattern( @Nonnull final String path, @Nonnull final String expected )
     throws Exception
   {
-    final RegExp mock = PowerMockito.mock( RegExp.class );
-    PowerMockito.whenNew( RegExp.class ).withArguments( eq( regex ) ).thenReturn( mock );
-
-    final RegExp re = LocationPattern.pathToRegex( path );
-
-    assertEquals( re, mock );
-
-    PowerMockito.verifyNew( RegExp.class ).withArguments( eq( regex ) );
+    assertEquals( LocationPattern.pathToPattern( path ), expected );
   }
 }
