@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import router.client.api2.OnChangeCallbackAsync;
+import router.client.api2.OnEnterCallbackAsync;
+import router.client.api2.OnLeaveCallbackAsync;
 
 public final class Route
 {
@@ -14,6 +17,12 @@ public final class Route
   private final String[] _parameterKeys;
   @Nullable
   private final GuardCallback _guard;
+  @Nullable
+  private OnLeaveCallbackAsync _onLeave;
+  @Nullable
+  private OnEnterCallbackAsync _onEnter;
+  @Nullable
+  private OnChangeCallbackAsync _onChange;
 
   public Route( @Nonnull final String path )
   {
@@ -42,6 +51,39 @@ public final class Route
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
     _guard = guard;
+  }
+
+  @Nullable
+  public OnLeaveCallbackAsync getOnLeave()
+  {
+    return _onLeave;
+  }
+
+  public void setOnLeave( @Nullable final OnLeaveCallbackAsync onLeave )
+  {
+    _onLeave = onLeave;
+  }
+
+  @Nullable
+  public OnEnterCallbackAsync getOnEnter()
+  {
+    return _onEnter;
+  }
+
+  public void setOnEnter( @Nullable final OnEnterCallbackAsync onEnter )
+  {
+    _onEnter = onEnter;
+  }
+
+  @Nullable
+  public OnChangeCallbackAsync getOnChange()
+  {
+    return _onChange;
+  }
+
+  public void setOnChange( @Nullable final OnChangeCallbackAsync onChange )
+  {
+    _onChange = onChange;
   }
 
   @Nullable
