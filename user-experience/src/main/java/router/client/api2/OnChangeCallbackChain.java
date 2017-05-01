@@ -34,7 +34,7 @@ public final class OnChangeCallbackChain
     else
     {
       final RouteEntry<OnChangeCallbackAsync> entry = _elements.get( index );
-      entry.getCallback().onChange( previousLocation, entry.getLocation(), new OnChangeControl()
+      entry.getCallback().onChange( previousLocation, entry.getMatch(), new OnChangeControl()
       {
         @Override
         public void abort()

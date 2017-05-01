@@ -2,13 +2,12 @@ package router.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import router.client.backend.RoutingBackend;
-import router.client.location.Location;
-import router.client.location.LocationDefinition;
+import router.client.location.LocationMatch;
+import router.client.location.LocationPattern;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route;
 import router.client.route.RouteDefinition;
@@ -96,11 +95,11 @@ public final class RouteManager
   {
     for ( final RouteDefinition definition : _routes )
     {
-      final LocationDefinition locationDefinition = definition.getLocation();
-      final Map<String, Object> routeData = locationDefinition.getPattern().match( location );
-      if ( null != routeData )
+      final LocationPattern pattern = definition.getLocation();
+      final LocationMatch match = pattern.match( location );
+      if ( null != match )
       {
-        final Route route = new Route( new Location( location, locationDefinition, routeData ), definition );
+        final Route route = new Route( match, definition );
         if ( processRoute( route ) )
         {
           _lastRoute = route;
@@ -124,17 +123,9 @@ public final class RouteManager
     final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
     if ( null != beforeRoute )
     {
-      beforeRoute.beforeRoute( route, () -> completeRouting( route ) );
+      beforeRoute.beforeRoute( route );
     }
-    else
-    {
-      completeRouting( route );
-    }
-    return true;
-  }
-
-  private void completeRouting( @Nonnull final Route route )
-  {
     route.getDefinition().getRoute().route( route, _target );
+    return true;
   }
 }

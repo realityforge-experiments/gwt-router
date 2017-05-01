@@ -7,7 +7,6 @@ import java.util.Objects;
 import router.client.backend.Elemental2RoutingBackend;
 import router.client.backend.GwtFrameworkRoutingBackend;
 import router.client.backend.RoutingBackend;
-import router.client.location.LocationDefinition;
 import router.client.location.LocationPattern;
 import router.client.location.RegExp;
 import router.client.route.RouteDefinition;
@@ -28,16 +27,16 @@ public final class Router
 
     final RouteDefinition[] routes = new RouteDefinition[]
       {
-        new RouteDefinition( new LocationDefinition( new LocationPattern( "/" ), null ),
+        new RouteDefinition( new LocationPattern( "/" ),
                              null,
                              ( route, element ) -> route2( element, "/" ),
                              null ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( "/foo" ), null ),
+        new RouteDefinition( new LocationPattern( "/foo" ),
                              null,
                              ( route, element ) -> route2( element, "/foo" ),
                              null ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)/(\\d+)$" ),
-                                                                          new String[]{ "bazID", "buzID" } ), null ),
+        new RouteDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)/(\\d+)$" ),
+                                                  new String[]{ "bazID", "buzID" } ),
                              null,
                              ( route, element ) -> route2( element,
                                                            "/baz/" +
@@ -45,27 +44,27 @@ public final class Router
                                                            "/" +
                                                            route.getData( "buzID" ) ),
                              null ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)$" ),
-                                                                          new String[]{ "bazID" } ),
-                                                     ( route -> Objects.equals( route.getParameter( "bazID" ), "42" ) ) ),
+        new RouteDefinition( new LocationPattern( new RegExp( "^/baz/(\\d+)$" ),
+                                                  new String[]{ "bazID" },
+                                                  ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ),
                              null,
                              ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
                              null ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/biz/(\\d+)$" ),
-                                                                          new String[]{ "bazID" } ),
-                                                     ( route -> Objects.equals( route.getParameter( "bazID" ), "42" ) ) ),
+        new RouteDefinition( new LocationPattern( new RegExp( "^/biz/(\\d+)$" ),
+                                                  new String[]{ "bazID" },
+                                                  ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ),
                              null,
                              ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
                              null ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/ding/(\\d+)$" ),
-                                                                          new String[]{ "bazID" } ),
-                                                     null ),
+        new RouteDefinition( new LocationPattern( new RegExp( "^/ding/(\\d+)$" ),
+                                                  new String[]{ "bazID" } ),
                              null,
                              ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
                              route -> route2( Global.document.getElementById( "hook" ),
                                               "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ) ),
-        new RouteDefinition( new LocationDefinition( new LocationPattern( new RegExp( "^/end$" ), new String[ 0 ] ),
-                                                     null ), null, ( route, element ) ->
+        new RouteDefinition( new LocationPattern( new RegExp( "^/end$" ) ),
+                             null,
+                             ( route, element ) ->
                              {
                                route2( element, "/end" );
                                _routeManager.uninstall();

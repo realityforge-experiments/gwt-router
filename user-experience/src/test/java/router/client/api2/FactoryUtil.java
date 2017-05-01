@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import org.realityforge.guiceyloops.shared.ValueUtil;
-import router.client.location.Location;
-import router.client.location.LocationDefinition;
+import router.client.location.LocationMatch;
 import router.client.location.LocationPattern;
 import router.client.location.TestRegExp;
 
@@ -19,13 +18,12 @@ final class FactoryUtil
   }
 
   @Nonnull
-  static Location createLocation()
+  static LocationMatch createLocation()
   {
     final String newLocation = ValueUtil.randomString();
     final TestRegExp regExp = new TestRegExp();
     final LocationPattern pattern = new LocationPattern( regExp, new String[ 0 ] );
-    final LocationDefinition definition = new LocationDefinition( pattern, null );
-    return new Location( newLocation, definition, Collections.emptyMap() );
+    return new LocationMatch( newLocation, pattern, Collections.emptyMap() );
   }
 
   @Nonnull

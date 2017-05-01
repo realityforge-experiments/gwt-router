@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import org.realityforge.guiceyloops.shared.ValueUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 public class LocationPatternTest
@@ -33,12 +34,51 @@ public class LocationPatternTest
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
     final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys );
-    final Map<String, Object> matchData = pattern.match( location );
-    assertNotNull( matchData );
+    final LocationMatch match = pattern.match( location );
+    assertNotNull( match );
+    assertEquals( match.getLocation(), location );
+    assertEquals( match.getPattern(), pattern );
+    final Map<String, Object> matchData = match.getParameters();
     assertEquals( matchData.size(), 3 );
     assertEquals( matchData.get( "param0" ), "a" );
     assertEquals( matchData.get( "p1" ), "b" );
     assertEquals( matchData.get( "param2" ), "c" );
+  }
+
+  @Test
+  public void match_whereGuardRejectsMatch()
+  {
+    final String location = ValueUtil.randomString();
+    final String[] results = { location, "a", "b", "c" };
+    final String[] parameterKeys = { "param0", null, "param2", "param3" };
+    final LocationPattern.GuardCallback guard = mock( LocationPattern.GuardCallback.class );
+    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys, guard );
+    when( guard.shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) ) ).
+      thenReturn( false );
+    assertNull( pattern.match( location ) );
+
+    verify( guard ).shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) );
+  }
+
+  @Test
+  public void match_whereGuardModifiesData()
+  {
+    final String location = ValueUtil.randomString();
+    final String[] results = { location, "1" };
+    final String[] parameterKeys = { "param0" };
+    final LocationPattern.GuardCallback guard = ( location1, pattern1, matchData ) ->
+    {
+      matchData.put( "param0", Integer.parseInt( (String) matchData.get( "param0" ) ) );
+      return true;
+    };
+    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys, guard );
+    final LocationMatch match = pattern.match( location );
+    assertNotNull( match );
+    assertEquals( match.getLocation(), location );
+    assertEquals( match.getPattern(), pattern );
+    final Map<String, Object> matchData = match.getParameters();
+    assertEquals( matchData.size(), 1 );
+    assertEquals( matchData.get( "param0" ), 1 );
   }
 
   @Test
@@ -48,7 +88,11 @@ public class LocationPatternTest
     final String[] results = { location };
     final String[] parameterKeys = {};
     final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys );
-    final Map<String, Object> matchData = pattern.match( location );
+    final LocationMatch match = pattern.match( location );
+    assertNotNull( match );
+    assertEquals( match.getLocation(), location );
+    assertEquals( match.getPattern(), pattern );
+    final Map<String, Object> matchData = match.getParameters();
     assertNotNull( matchData );
     assertEquals( matchData.size(), 0 );
   }
@@ -57,8 +101,7 @@ public class LocationPatternTest
   public void match_noMatch()
   {
     final LocationPattern pattern = new LocationPattern( new TestRegExp(), new String[]{} );
-    final Map<String, Object> matchData = pattern.match( ValueUtil.randomString() );
-    assertNull( matchData );
+    assertNull( pattern.match( ValueUtil.randomString() ) );
   }
 
   @Test

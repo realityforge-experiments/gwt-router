@@ -1,7 +1,7 @@
 package router.client.api2;
 
 import org.testng.annotations.Test;
-import router.client.location.Location;
+import router.client.location.LocationMatch;
 import static org.mockito.Mockito.*;
 
 public final class OnEnterCallbackAsyncAdapterTest
@@ -13,10 +13,10 @@ public final class OnEnterCallbackAsyncAdapterTest
     final OnEnterCallback callback = mock( OnEnterCallback.class );
     final OnEnterCallbackAsyncAdapter adapter = new OnEnterCallbackAsyncAdapter( callback );
 
-    final Location location = FactoryUtil.createLocation();
+    final LocationMatch match = FactoryUtil.createLocation();
 
-    adapter.onEnter( location, control );
-    verify( callback ).onEnter( location );
+    adapter.onEnter( match, control );
+    verify( callback ).onEnter( match );
     verify( control ).proceed();
   }
 }

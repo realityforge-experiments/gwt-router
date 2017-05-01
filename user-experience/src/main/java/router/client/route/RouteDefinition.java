@@ -3,12 +3,12 @@ package router.client.route;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.location.LocationDefinition;
+import router.client.location.LocationPattern;
 
 public final class RouteDefinition
 {
   @Nonnull
-  private final LocationDefinition _location;
+  private final LocationPattern _location;
   @Nullable
   private final BeforeRouteCallback _beforeRoute;
   @Nonnull
@@ -16,7 +16,7 @@ public final class RouteDefinition
   @Nullable
   private final UpdateRouteCallback _updateRoute;
 
-  public RouteDefinition( @Nonnull final LocationDefinition location,
+  public RouteDefinition( @Nonnull final LocationPattern location,
                           @Nullable final BeforeRouteCallback beforeRoute,
                           @Nonnull final RouteCallback route,
                           @Nullable final UpdateRouteCallback updateRoute )
@@ -28,7 +28,7 @@ public final class RouteDefinition
   }
 
   @Nonnull
-  public LocationDefinition getLocation()
+  public LocationPattern getLocation()
   {
     return _location;
   }

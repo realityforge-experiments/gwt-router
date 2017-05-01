@@ -2,7 +2,7 @@ package router.client.api2;
 
 import org.realityforge.guiceyloops.shared.ValueUtil;
 import org.testng.annotations.Test;
-import router.client.location.Location;
+import router.client.location.LocationMatch;
 import static org.mockito.Mockito.*;
 
 public final class OnChangeCallbackAsyncAdapterTest
@@ -14,12 +14,12 @@ public final class OnChangeCallbackAsyncAdapterTest
     final OnChangeCallback callback = mock( OnChangeCallback.class );
     final OnChangeCallbackAsyncAdapter adapter = new OnChangeCallbackAsyncAdapter( callback );
 
-    final Location nextLocation = FactoryUtil.createLocation();
+    final LocationMatch match = FactoryUtil.createLocation();
     final String previousLocation = ValueUtil.randomString();
 
-    when( callback.onChange( previousLocation, nextLocation ) ).thenReturn( Boolean.TRUE );
-    adapter.onChange( previousLocation, nextLocation, control );
-    verify( callback ).onChange( previousLocation, nextLocation );
+    when( callback.onChange( previousLocation, match ) ).thenReturn( Boolean.TRUE );
+    adapter.onChange( previousLocation, match, control );
+    verify( callback ).onChange( previousLocation, match );
     verify( control ).proceed();
   }
 
@@ -30,12 +30,12 @@ public final class OnChangeCallbackAsyncAdapterTest
     final OnChangeCallback callback = mock( OnChangeCallback.class );
     final OnChangeCallbackAsyncAdapter adapter = new OnChangeCallbackAsyncAdapter( callback );
 
-    final Location nextLocation = FactoryUtil.createLocation();
+    final LocationMatch match = FactoryUtil.createLocation();
     final String previousLocation = ValueUtil.randomString();
 
-    when( callback.onChange( previousLocation, nextLocation ) ).thenReturn( Boolean.FALSE );
-    adapter.onChange( previousLocation, nextLocation, control );
-    verify( callback ).onChange( previousLocation, nextLocation );
+    when( callback.onChange( previousLocation, match ) ).thenReturn( Boolean.FALSE );
+    adapter.onChange( previousLocation, match, control );
+    verify( callback ).onChange( previousLocation, match );
     verify( control ).abort();
   }
 }

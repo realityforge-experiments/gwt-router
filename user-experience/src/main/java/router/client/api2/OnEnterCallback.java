@@ -2,13 +2,13 @@ package router.client.api2;
 
 import javax.annotation.Nonnull;
 import jsinterop.annotations.JsFunction;
-import router.client.location.Location;
+import router.client.location.LocationMatch;
 
 @JsFunction
 @FunctionalInterface
 public interface OnEnterCallback
 {
-  void onEnter( @Nonnull Location nextLocation );
+  void onEnter( @Nonnull LocationMatch match );
 
   default OnEnterCallbackAsync asAsync()
   {

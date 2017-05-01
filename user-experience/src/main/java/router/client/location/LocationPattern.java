@@ -12,10 +12,12 @@ public final class LocationPattern
   private final RegExp _matcher;
   @Nullable
   private final String[] _parameterKeys;
+  @Nullable
+  private final GuardCallback _guard;
 
   public LocationPattern( @Nonnull final String path )
   {
-    this( new RegExp( pathToPattern( path ) ), new String[ 0 ] );
+    this( new RegExp( pathToPattern( path ) ) );
   }
 
   static String pathToPattern( @Nonnull final String path )
@@ -23,15 +25,27 @@ public final class LocationPattern
     return "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
   }
 
+  public LocationPattern( @Nonnull final RegExp matcher )
+  {
+    this( matcher, null );
+  }
+
+  public LocationPattern( @Nonnull final RegExp matcher, @Nullable final String[] parameterKeys )
+  {
+    this( matcher, parameterKeys, null );
+  }
+
   public LocationPattern( @Nonnull final RegExp matcher,
-                          @Nullable final String[] parameterKeys )
+                          @Nullable final String[] parameterKeys,
+                          @Nullable final GuardCallback guard )
   {
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
+    _guard = guard;
   }
 
   @Nullable
-  public Map<String, Object> match( @Nonnull final String location )
+  public LocationMatch match( @Nonnull final String location )
   {
     Objects.requireNonNull( location );
     final String[] groups = _matcher.exec( location );
@@ -47,7 +61,14 @@ public final class LocationPattern
 
         matchData.put( key, value );
       }
-      return matchData;
+      if ( null == _guard || _guard.shouldMatch( location, this, matchData ) )
+      {
+        return new LocationMatch( location, this, matchData );
+      }
+      else
+      {
+        return null;
+      }
     }
     else
     {
@@ -61,5 +82,17 @@ public final class LocationPattern
     return null == _parameterKeys || _parameterKeys.length <= paramIndex || null == _parameterKeys[ paramIndex ] ?
            "p" + paramIndex :
            _parameterKeys[ paramIndex ];
+  }
+
+  /**
+   * This callback is final check to see if the pattern matches.
+   * The guard can modify the matchData.
+   */
+  @FunctionalInterface
+  public interface GuardCallback
+  {
+    boolean shouldMatch( @Nonnull String location,
+                         @Nonnull LocationPattern pattern,
+                         @Nonnull Map<String, Object> matchData );
   }
 }

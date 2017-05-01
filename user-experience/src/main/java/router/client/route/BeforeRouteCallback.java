@@ -7,5 +7,5 @@ package router.client.route;
 @FunctionalInterface
 public interface BeforeRouteCallback
 {
-  void beforeRoute( Route route, ContinueRoutingCallback callback );
+  void beforeRoute( Route route );
 }

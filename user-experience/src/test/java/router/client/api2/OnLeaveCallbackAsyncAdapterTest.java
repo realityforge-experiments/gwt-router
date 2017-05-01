@@ -1,7 +1,7 @@
 package router.client.api2;
 
 import org.testng.annotations.Test;
-import router.client.location.Location;
+import router.client.location.LocationMatch;
 import static org.mockito.Mockito.*;
 
 public final class OnLeaveCallbackAsyncAdapterTest
@@ -13,10 +13,10 @@ public final class OnLeaveCallbackAsyncAdapterTest
     final OnLeaveCallback callback = mock( OnLeaveCallback.class );
     final OnLeaveCallbackAsyncAdapter adapter = new OnLeaveCallbackAsyncAdapter( callback );
 
-    final Location location = FactoryUtil.createLocation();
+    final LocationMatch match = FactoryUtil.createLocation();
 
-    adapter.onLeave( location, control );
-    verify( callback ).onLeave( location );
+    adapter.onLeave( match, control );
+    verify( callback ).onLeave( match );
     verify( control ).proceed();
   }
 }
