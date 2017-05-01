@@ -9,7 +9,7 @@ import router.client.backend.RoutingBackend;
 import router.client.location.LocationMatch;
 import router.client.location.LocationPattern;
 import router.client.route.BeforeRouteCallback;
-import router.client.route.Route;
+import router.client.route.Route2;
 import router.client.route.RouteDefinition;
 import router.client.route.UpdateRouteCallback;
 
@@ -24,7 +24,7 @@ public final class RouteManager
   @Nullable
   private String _defaultLocation;
   @Nullable
-  private Route _lastRoute;
+  private Route2 _lastRoute;
   private Object _callback;
 
   public RouteManager( @Nonnull final RoutingBackend backend, @Nonnull final Object target )
@@ -71,11 +71,11 @@ public final class RouteManager
   }
 
   @Nullable
-  public Route route()
+  public Route2 route()
   {
     final String location = _backend.getHash();
 
-    final Route route = attemptRouteMatch( location );
+    final Route2 route = attemptRouteMatch( location );
     if ( null != route )
     {
       return route;
@@ -91,7 +91,7 @@ public final class RouteManager
     }
   }
 
-  private Route attemptRouteMatch( final String location )
+  private Route2 attemptRouteMatch( final String location )
   {
     for ( final RouteDefinition definition : _routes )
     {
@@ -99,7 +99,7 @@ public final class RouteManager
       final LocationMatch match = pattern.match( location );
       if ( null != match )
       {
-        final Route route = new Route( match, definition );
+        final Route2 route = new Route2( match, definition );
         if ( processRoute( route ) )
         {
           _lastRoute = route;
@@ -110,7 +110,7 @@ public final class RouteManager
     return null;
   }
 
-  private boolean processRoute( @Nonnull final Route route )
+  private boolean processRoute( @Nonnull final Route2 route )
   {
     Objects.requireNonNull( route );
     final RouteDefinition definition = route.getDefinition();

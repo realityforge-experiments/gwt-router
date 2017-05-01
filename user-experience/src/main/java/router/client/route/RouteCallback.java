@@ -6,5 +6,5 @@ package router.client.route;
 @FunctionalInterface
 public interface RouteCallback
 {
-  void route( Route route, Object element );
+  void route( Route2 route, Object element );
 }
