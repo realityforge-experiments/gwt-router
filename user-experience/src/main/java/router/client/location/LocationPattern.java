@@ -24,9 +24,9 @@ public final class LocationPattern
   }
 
   public LocationPattern( @Nonnull final RegExp matcher,
-                          @Nonnull final String[] parameterKeys )
+                          @Nullable final String[] parameterKeys )
   {
-    _parameterKeys = Objects.requireNonNull( parameterKeys );
+    _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
   }
 
