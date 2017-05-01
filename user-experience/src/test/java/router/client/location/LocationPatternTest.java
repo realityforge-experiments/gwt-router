@@ -23,4 +23,15 @@ public class LocationPatternTest
   {
     assertEquals( LocationPattern.pathToPattern( path ), expected );
   }
+
+  @Test
+  public void toKey()
+  {
+    final String[] parameterKeys = { "a", null, "c" };
+    final LocationPattern pattern = new LocationPattern( new TestRegExp(), parameterKeys );
+    assertEquals( pattern.toKey( 0 ), "a" );
+    assertEquals( pattern.toKey( 1 ), "p1" );
+    assertEquals( pattern.toKey( 2 ), "c" );
+    assertEquals( pattern.toKey( 3 ), "p3" );
+  }
 }
