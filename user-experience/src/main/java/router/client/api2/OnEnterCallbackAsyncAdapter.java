@@ -2,7 +2,7 @@ package router.client.api2;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.location.LocationMatch;
+import router.client.location.Route;
 
 final class OnEnterCallbackAsyncAdapter
   implements OnEnterCallbackAsync
@@ -15,9 +15,11 @@ final class OnEnterCallbackAsyncAdapter
   }
 
   @Override
-  public void onEnter( @Nonnull final LocationMatch match, @Nonnull final OnEnterControl control )
+  public void onEnter( @Nonnull final RouteContext context,
+                       @Nonnull final Route route,
+                       @Nonnull final OnEnterControl control )
   {
-    _callback.onEnter( match );
+    _callback.onEnter( context, route );
     control.proceed();
   }
 }

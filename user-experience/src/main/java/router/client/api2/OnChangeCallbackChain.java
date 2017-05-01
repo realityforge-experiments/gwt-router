@@ -15,14 +15,16 @@ public final class OnChangeCallbackChain
     _elements = Objects.requireNonNull( elements );
   }
 
-  public void onChange( @Nullable final String previousLocation,
+  public void onChange( @Nonnull final RouteContext context,
+                        @Nullable final String previousLocation,
                         @Nonnull final Runnable abortAction,
                         @Nonnull final Runnable nextAction )
   {
-    onChange( previousLocation, abortAction, nextAction, 0 );
+    onChange( context, previousLocation, abortAction, nextAction, 0 );
   }
 
-  private void onChange( @Nullable final String previousLocation,
+  private void onChange( @Nonnull final RouteContext context,
+                         @Nullable final String previousLocation,
                          @Nonnull final Runnable abortAction,
                          @Nonnull final Runnable nextAction,
                          final int index )
@@ -34,7 +36,7 @@ public final class OnChangeCallbackChain
     else
     {
       final RouteEntry<OnChangeCallbackAsync> entry = _elements.get( index );
-      entry.getCallback().onChange( previousLocation, entry.getMatch(), new OnChangeControl()
+      entry.getCallback().onChange( context, previousLocation, entry.getRoute(), new OnChangeControl()
       {
         @Override
         public void abort()
@@ -51,7 +53,7 @@ public final class OnChangeCallbackChain
         @Override
         public void proceed()
         {
-          onChange( previousLocation, abortAction, nextAction, index + 1 );
+          onChange( context, previousLocation, abortAction, nextAction, index + 1 );
         }
       } );
     }

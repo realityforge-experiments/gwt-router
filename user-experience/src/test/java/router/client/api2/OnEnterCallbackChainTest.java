@@ -15,9 +15,10 @@ public final class OnEnterCallbackChainTest
     final ArrayList<RouteEntry<OnEnterCallbackAsync>> elements = new ArrayList<>();
     final OnEnterCallbackChain chain = new OnEnterCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onEnter( nextAction );
+    chain.onEnter( context, nextAction );
 
     verify( nextAction ).run();
   }
@@ -32,9 +33,10 @@ public final class OnEnterCallbackChainTest
     elements.add( FactoryUtil.createOnEnterCallbackAsync( count, ChainControl::proceed ) );
     final OnEnterCallbackChain chain = new OnEnterCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onEnter( nextAction );
+    chain.onEnter( context, nextAction );
 
     verify( nextAction ).run();
 
@@ -52,9 +54,10 @@ public final class OnEnterCallbackChainTest
     elements.add( FactoryUtil.createOnEnterCallbackAsync( count, ChainControl::proceed ) );
     final OnEnterCallbackChain chain = new OnEnterCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onEnter( nextAction );
+    chain.onEnter( context, nextAction );
 
     verify( nextAction ).run();
 

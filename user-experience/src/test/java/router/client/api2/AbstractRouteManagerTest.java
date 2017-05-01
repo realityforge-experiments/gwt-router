@@ -28,12 +28,13 @@ public class AbstractRouteManagerTest
     rm._onEnterCallbackChain = onEnter;
     rm._onLeaveCallbackChain = onLeave;
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
     final Runnable abortAction = mock( Runnable.class );
 
     final String previousLocation = ValueUtil.randomString();
     final String newLocation = ValueUtil.randomString();
-    rm.route( previousLocation, newLocation, nextAction, abortAction );
+    rm.route( previousLocation, newLocation, context, nextAction, abortAction );
 
     assertEquals( rm._onChangeLocation, newLocation );
     assertEquals( rm._onEnterLocation, newLocation );
@@ -65,12 +66,13 @@ public class AbstractRouteManagerTest
     rm._onEnterCallbackChain = onEnter;
     rm._onLeaveCallbackChain = onLeave;
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
     final Runnable abortAction = mock( Runnable.class );
 
     final String previousLocation = ValueUtil.randomString();
     final String newLocation = ValueUtil.randomString();
-    rm.route( previousLocation, newLocation, nextAction, abortAction );
+    rm.route( previousLocation, newLocation, context, nextAction, abortAction );
 
     assertEquals( rm._onChangeLocation, newLocation );
     assertNull( rm._onEnterLocation, newLocation );

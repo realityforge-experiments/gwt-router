@@ -2,7 +2,7 @@ package router.client.api2;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import router.client.location.LocationMatch;
+import router.client.location.Route;
 
 class OnLeaveCallbackAsyncAdapter
   implements OnLeaveCallbackAsync
@@ -15,9 +15,11 @@ class OnLeaveCallbackAsyncAdapter
   }
 
   @Override
-  public void onLeave( @Nonnull final LocationMatch match, @Nonnull final OnLeaveControl control )
+  public void onLeave( @Nonnull final RouteContext context,
+                       @Nonnull final Route route,
+                       @Nonnull final OnLeaveControl control )
   {
-    _callback.onLeave( match );
+    _callback.onLeave( context, route );
     control.proceed();
   }
 }

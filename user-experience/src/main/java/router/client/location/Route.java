@@ -6,7 +6,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class LocationPattern
+public final class Route
 {
   @Nonnull
   private final RegExp _matcher;
@@ -15,7 +15,7 @@ public final class LocationPattern
   @Nullable
   private final GuardCallback _guard;
 
-  public LocationPattern( @Nonnull final String path )
+  public Route( @Nonnull final String path )
   {
     this( new RegExp( pathToPattern( path ) ) );
   }
@@ -25,19 +25,19 @@ public final class LocationPattern
     return "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
   }
 
-  public LocationPattern( @Nonnull final RegExp matcher )
+  public Route( @Nonnull final RegExp matcher )
   {
     this( matcher, null );
   }
 
-  public LocationPattern( @Nonnull final RegExp matcher, @Nullable final String[] parameterKeys )
+  public Route( @Nonnull final RegExp matcher, @Nullable final String[] parameterKeys )
   {
     this( matcher, parameterKeys, null );
   }
 
-  public LocationPattern( @Nonnull final RegExp matcher,
-                          @Nullable final String[] parameterKeys,
-                          @Nullable final GuardCallback guard )
+  public Route( @Nonnull final RegExp matcher,
+                @Nullable final String[] parameterKeys,
+                @Nullable final GuardCallback guard )
   {
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
@@ -92,7 +92,7 @@ public final class LocationPattern
   public interface GuardCallback
   {
     boolean shouldMatch( @Nonnull String location,
-                         @Nonnull LocationPattern pattern,
+                         @Nonnull Route route,
                          @Nonnull Map<String, Object> matchData );
   }
 }

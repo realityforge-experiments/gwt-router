@@ -14,12 +14,12 @@ public final class OnLeaveCallbackChain
     _elements = Objects.requireNonNull( elements );
   }
 
-  public void onLeave( @Nonnull final Runnable nextAction )
+  public void onLeave( @Nonnull final RouteContext context, @Nonnull final Runnable nextAction )
   {
-    onLeave( nextAction, 0 );
+    onLeave( context, nextAction, 0 );
   }
 
-  private void onLeave( @Nonnull final Runnable nextAction, final int index )
+  private void onLeave( @Nonnull final RouteContext context, @Nonnull final Runnable nextAction, final int index )
   {
     if ( index >= _elements.size() )
     {
@@ -28,12 +28,12 @@ public final class OnLeaveCallbackChain
     else
     {
       final RouteEntry<OnLeaveCallbackAsync> entry = _elements.get( index );
-      entry.getCallback().onLeave( entry.getMatch(), new OnLeaveControl()
+      entry.getCallback().onLeave( context, entry.getRoute(), new OnLeaveControl()
       {
         @Override
         public void proceed()
         {
-          onLeave( nextAction, index + 1 );
+          onLeave( context, nextAction, index + 1 );
         }
 
         @Override

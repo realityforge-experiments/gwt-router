@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-public class LocationPatternTest
+public class RouteTest
 {
   @DataProvider( name = "pathToRegex" )
   public static Object[][] pathToRegexData()
@@ -24,7 +24,7 @@ public class LocationPatternTest
   public void pathToPattern( @Nonnull final String path, @Nonnull final String expected )
     throws Exception
   {
-    assertEquals( LocationPattern.pathToPattern( path ), expected );
+    assertEquals( Route.pathToPattern( path ), expected );
   }
 
   @Test
@@ -33,7 +33,7 @@ public class LocationPatternTest
     final String location = ValueUtil.randomString();
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
-    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys );
+    final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
     final LocationMatch match = pattern.match( location );
     assertNotNull( match );
     assertEquals( match.getLocation(), location );
@@ -51,8 +51,8 @@ public class LocationPatternTest
     final String location = ValueUtil.randomString();
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
-    final LocationPattern.GuardCallback guard = mock( LocationPattern.GuardCallback.class );
-    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys, guard );
+    final Route.GuardCallback guard = mock( Route.GuardCallback.class );
+    final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
     when( guard.shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) ) ).
       thenReturn( false );
     assertNull( pattern.match( location ) );
@@ -66,12 +66,12 @@ public class LocationPatternTest
     final String location = ValueUtil.randomString();
     final String[] results = { location, "1" };
     final String[] parameterKeys = { "param0" };
-    final LocationPattern.GuardCallback guard = ( location1, pattern1, matchData ) ->
+    final Route.GuardCallback guard = ( location1, pattern1, matchData ) ->
     {
       matchData.put( "param0", Integer.parseInt( (String) matchData.get( "param0" ) ) );
       return true;
     };
-    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys, guard );
+    final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
     final LocationMatch match = pattern.match( location );
     assertNotNull( match );
     assertEquals( match.getLocation(), location );
@@ -87,7 +87,7 @@ public class LocationPatternTest
     final String location = ValueUtil.randomString();
     final String[] results = { location };
     final String[] parameterKeys = {};
-    final LocationPattern pattern = new LocationPattern( new TestRegExp( results ), parameterKeys );
+    final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
     final LocationMatch match = pattern.match( location );
     assertNotNull( match );
     assertEquals( match.getLocation(), location );
@@ -100,7 +100,7 @@ public class LocationPatternTest
   @Test
   public void match_noMatch()
   {
-    final LocationPattern pattern = new LocationPattern( new TestRegExp(), new String[]{} );
+    final Route pattern = new Route( new TestRegExp(), new String[]{} );
     assertNull( pattern.match( ValueUtil.randomString() ) );
   }
 
@@ -108,7 +108,7 @@ public class LocationPatternTest
   public void toKey()
   {
     final String[] parameterKeys = { "a", null, "c" };
-    final LocationPattern pattern = new LocationPattern( new TestRegExp(), parameterKeys );
+    final Route pattern = new Route( new TestRegExp(), parameterKeys );
     assertEquals( pattern.toKey( 0 ), "a" );
     assertEquals( pattern.toKey( 1 ), "p1" );
     assertEquals( pattern.toKey( 2 ), "c" );

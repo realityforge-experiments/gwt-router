@@ -16,12 +16,14 @@ public final class OnChangeCallbackChainTest
     final ArrayList<RouteEntry<OnChangeCallbackAsync>> elements = new ArrayList<>();
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
+    final TestContext context = new TestContext();
+
     final Runnable abortAction = mock( Runnable.class );
     final Runnable nextAction = mock( Runnable.class );
 
     final String previousLocation = ValueUtil.randomString();
 
-    chain.onChange( previousLocation, abortAction, nextAction );
+    chain.onChange( context, previousLocation, abortAction, nextAction );
 
     verify( abortAction, never() ).run();
     verify( nextAction ).run();
@@ -37,10 +39,11 @@ public final class OnChangeCallbackChainTest
     elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable abortAction = mock( Runnable.class );
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onChange( ValueUtil.randomString(), abortAction, nextAction );
+    chain.onChange( context, ValueUtil.randomString(), abortAction, nextAction );
 
     verify( abortAction, never() ).run();
     verify( nextAction ).run();
@@ -59,10 +62,11 @@ public final class OnChangeCallbackChainTest
     elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable abortAction = mock( Runnable.class );
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onChange( ValueUtil.randomString(), abortAction, nextAction );
+    chain.onChange( context, ValueUtil.randomString(), abortAction, nextAction );
 
     verify( abortAction, never() ).run();
     verify( nextAction ).run();
@@ -81,10 +85,11 @@ public final class OnChangeCallbackChainTest
     elements.add( FactoryUtil.createOnChangeCallbackAsync( count, ChainControl::proceed ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable abortAction = mock( Runnable.class );
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onChange( ValueUtil.randomString(), abortAction, nextAction );
+    chain.onChange( context, ValueUtil.randomString(), abortAction, nextAction );
 
     verify( abortAction ).run();
     verify( nextAction, never() ).run();
@@ -103,10 +108,11 @@ public final class OnChangeCallbackChainTest
     elements.add( FactoryUtil.createOnChangeCallbackAsync( count, OnChangeControl::abort ) );
     final OnChangeCallbackChain chain = new OnChangeCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable abortAction = mock( Runnable.class );
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onChange( ValueUtil.randomString(), abortAction, nextAction );
+    chain.onChange( context, ValueUtil.randomString(), abortAction, nextAction );
 
     verify( abortAction, never() ).run();
     verify( nextAction ).run();

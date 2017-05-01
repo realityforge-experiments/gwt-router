@@ -14,12 +14,12 @@ public final class OnEnterCallbackChain
     _elements = Objects.requireNonNull( elements );
   }
 
-  public void onEnter( @Nonnull final Runnable nextAction )
+  public void onEnter( @Nonnull final RouteContext context, @Nonnull final Runnable nextAction )
   {
-    onEnter( nextAction, 0 );
+    onEnter( context, nextAction, 0 );
   }
 
-  private void onEnter( @Nonnull final Runnable nextAction, final int index )
+  private void onEnter( @Nonnull final RouteContext context, @Nonnull final Runnable nextAction, final int index )
   {
     if ( index >= _elements.size() )
     {
@@ -28,12 +28,12 @@ public final class OnEnterCallbackChain
     else
     {
       final RouteEntry<OnEnterCallbackAsync> entry = _elements.get( index );
-      entry.getCallback().onEnter( entry.getMatch(), new OnEnterControl()
+      entry.getCallback().onEnter( context, entry.getRoute(), new OnEnterControl()
       {
         @Override
         public void proceed()
         {
-          onEnter( nextAction, index + 1 );
+          onEnter( context, nextAction, index + 1 );
         }
 
         @Override

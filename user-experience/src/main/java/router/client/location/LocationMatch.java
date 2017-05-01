@@ -10,12 +10,12 @@ public final class LocationMatch
   @Nonnull
   private final String _location;
   @Nonnull
-  private final LocationPattern _pattern;
+  private final Route _pattern;
   @Nonnull
   private final Map<String, Object> _parameters;
 
   public LocationMatch( @Nonnull final String location,
-                        @Nonnull final LocationPattern pattern,
+                        @Nonnull final Route pattern,
                         @Nonnull final Map<String, Object> parameters )
   {
     _location = Objects.requireNonNull( location );
@@ -30,7 +30,7 @@ public final class LocationMatch
   }
 
   @Nonnull
-  public LocationPattern getPattern()
+  public Route getPattern()
   {
     return _pattern;
   }

@@ -1,14 +1,11 @@
 package router.client.api2;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-import org.realityforge.guiceyloops.shared.ValueUtil;
-import router.client.location.LocationMatch;
-import router.client.location.LocationPattern;
+import router.client.location.Route;
 import router.client.location.TestRegExp;
 
 final class FactoryUtil
@@ -18,22 +15,20 @@ final class FactoryUtil
   }
 
   @Nonnull
-  static LocationMatch createLocation()
+  static Route createRoute()
   {
-    final String newLocation = ValueUtil.randomString();
     final TestRegExp regExp = new TestRegExp();
-    final LocationPattern pattern = new LocationPattern( regExp, new String[ 0 ] );
-    return new LocationMatch( newLocation, pattern, Collections.emptyMap() );
+    return new Route( regExp, new String[ 0 ] );
   }
 
   @Nonnull
   static RouteEntry<OnLeaveCallbackAsync> createOnLeaveCallbackAsync( @Nonnull final AtomicInteger count,
                                                                       @Nonnull final Consumer<OnLeaveControl> callback )
   {
-    return new RouteEntry<>( createLocation(), ( l, c ) ->
+    return new RouteEntry<>( createRoute(), ( c, r, cb ) ->
     {
       count.incrementAndGet();
-      callback.accept( c );
+      callback.accept( cb );
     } );
   }
 
@@ -41,10 +36,10 @@ final class FactoryUtil
   static RouteEntry<OnEnterCallbackAsync> createOnEnterCallbackAsync( @Nonnull final AtomicInteger count,
                                                                       @Nonnull final Consumer<OnEnterControl> callback )
   {
-    return new RouteEntry<>( createLocation(), ( l, c ) ->
+    return new RouteEntry<>( createRoute(), ( c, r, cb ) ->
     {
       count.incrementAndGet();
-      callback.accept( c );
+      callback.accept( cb );
     } );
   }
 
@@ -52,10 +47,10 @@ final class FactoryUtil
   static RouteEntry<OnChangeCallbackAsync> createOnChangeCallbackAsync( @Nonnull final AtomicInteger count,
                                                                         @Nonnull final Consumer<OnChangeControl> callback )
   {
-    return new RouteEntry<>( createLocation(), ( p, l, c ) ->
+    return new RouteEntry<>( createRoute(), ( c, p, r, cb ) ->
     {
       count.incrementAndGet();
-      callback.accept( c );
+      callback.accept( cb );
     } );
   }
 

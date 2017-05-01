@@ -3,22 +3,23 @@ package router.client.api2;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import router.client.location.LocationMatch;
+import router.client.location.Route;
 
 public final class RouteEntry<T>
 {
-  private final LocationMatch _match;
+  private final Route _route;
   private final T _callback;
 
-  public RouteEntry( @Nonnull final LocationMatch match, @Nonnull final T callback )
+  public RouteEntry( @Nonnull final Route route, @Nonnull final T callback )
   {
-    _match = Objects.requireNonNull( match );
+    _route = Objects.requireNonNull( route );
     _callback = Objects.requireNonNull( callback );
   }
 
   @Nonnull
-  public LocationMatch getMatch()
+  public Route getRoute()
   {
-    return _match;
+    return _route;
   }
 
   public T getCallback()

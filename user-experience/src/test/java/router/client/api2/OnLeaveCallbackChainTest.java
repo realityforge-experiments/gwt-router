@@ -15,9 +15,10 @@ public final class OnLeaveCallbackChainTest
     final ArrayList<RouteEntry<OnLeaveCallbackAsync>> elements = new ArrayList<>();
     final OnLeaveCallbackChain chain = new OnLeaveCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onLeave( nextAction );
+    chain.onLeave( context, nextAction );
 
     verify( nextAction ).run();
   }
@@ -32,9 +33,10 @@ public final class OnLeaveCallbackChainTest
     elements.add( FactoryUtil.createOnLeaveCallbackAsync( count, ChainControl::proceed ) );
     final OnLeaveCallbackChain chain = new OnLeaveCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onLeave( nextAction );
+    chain.onLeave( context, nextAction );
 
     verify( nextAction ).run();
 
@@ -52,9 +54,10 @@ public final class OnLeaveCallbackChainTest
     elements.add( FactoryUtil.createOnLeaveCallbackAsync( count, ChainControl::proceed ) );
     final OnLeaveCallbackChain chain = new OnLeaveCallbackChain( elements );
 
+    final TestContext context = new TestContext();
     final Runnable nextAction = mock( Runnable.class );
 
-    chain.onLeave( nextAction );
+    chain.onLeave( context, nextAction );
 
     verify( nextAction ).run();
 

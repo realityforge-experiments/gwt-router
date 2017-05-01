@@ -3,7 +3,7 @@ package router.client.api2;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import router.client.location.LocationMatch;
+import router.client.location.Route;
 
 final class OnChangeCallbackAsyncAdapter
   implements OnChangeCallbackAsync
@@ -16,11 +16,12 @@ final class OnChangeCallbackAsyncAdapter
   }
 
   @Override
-  public void onChange( @Nullable String previousLocation,
-                        @Nonnull LocationMatch match,
+  public void onChange( @Nonnull final RouteContext context,
+                        @Nullable final String previousLocation,
+                        @Nonnull final Route route,
                         @Nonnull final OnChangeControl control )
   {
-    if ( _callback.onChange( previousLocation, match ) )
+    if ( _callback.onChange( context, previousLocation, route ) )
     {
       control.proceed();
     }

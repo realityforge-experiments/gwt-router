@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import router.client.backend.RoutingBackend;
 import router.client.location.LocationMatch;
-import router.client.location.LocationPattern;
+import router.client.location.Route;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route2;
 import router.client.route.RouteDefinition;
@@ -95,7 +95,7 @@ public final class RouteManager
   {
     for ( final RouteDefinition definition : _routes )
     {
-      final LocationPattern pattern = definition.getLocation();
+      final Route pattern = definition.getLocation();
       final LocationMatch match = pattern.match( location );
       if ( null != match )
       {
