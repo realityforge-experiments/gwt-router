@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import router.client.backend.RoutingBackend;
 import router.client.location.Location;
 import router.client.location.LocationDefinition;
-import router.client.location.LocationGuardCallback;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route;
 import router.client.route.RouteDefinition;
@@ -116,30 +115,22 @@ public final class RouteManager
   {
     Objects.requireNonNull( route );
     final RouteDefinition definition = route.getDefinition();
-    final LocationGuardCallback preRouteGuard = definition.getLocation().getLocationGuard();
-    if ( preRouteGuard == null || preRouteGuard.matchLocation( route.getLocation() ) )
+    final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
+    if ( null != updateRoute && null != _lastRoute && _lastRoute.getDefinition() == definition )
     {
-      final UpdateRouteCallback updateRoute = definition.getUpdateRoute();
-      if ( null != updateRoute && null != _lastRoute && _lastRoute.getDefinition() == definition )
-      {
-        updateRoute.updateRoute( route );
-        return true;
-      }
-      final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
-      if ( null != beforeRoute )
-      {
-        beforeRoute.beforeRoute( route, () -> completeRouting( route ) );
-      }
-      else
-      {
-        completeRouting( route );
-      }
+      updateRoute.updateRoute( route );
       return true;
+    }
+    final BeforeRouteCallback beforeRoute = definition.getBeforeRoute();
+    if ( null != beforeRoute )
+    {
+      beforeRoute.beforeRoute( route, () -> completeRouting( route ) );
     }
     else
     {
-      return false;
+      completeRouting( route );
     }
+    return true;
   }
 
   private void completeRouting( @Nonnull final Route route )
