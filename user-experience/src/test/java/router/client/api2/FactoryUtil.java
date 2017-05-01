@@ -22,7 +22,7 @@ final class FactoryUtil
   static Location createLocation()
   {
     final String newLocation = ValueUtil.randomString();
-    final TestRegExp regExp = new TestRegExp( newLocation );
+    final TestRegExp regExp = new TestRegExp();
     final LocationPattern pattern = new LocationPattern( regExp, new String[ 0 ] );
     final LocationDefinition definition = new LocationDefinition( pattern, null );
     return new Location( newLocation, definition, Collections.emptyMap() );

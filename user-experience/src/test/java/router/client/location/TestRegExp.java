@@ -5,9 +5,9 @@ public class TestRegExp
 {
   private String[] _results;
 
-  public TestRegExp( final Object pattern )
+  public TestRegExp()
   {
-    super( pattern );
+    super( new Object() );
   }
 
   public void setResults( final String[] results )
