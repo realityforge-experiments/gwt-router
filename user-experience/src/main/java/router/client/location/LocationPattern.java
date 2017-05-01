@@ -18,7 +18,7 @@ public final class LocationPattern
     this( new RegExp( pathToPattern( path ) ), new String[ 0 ] );
   }
 
-  static String pathToPattern( final @Nonnull String path )
+  static String pathToPattern( @Nonnull final String path )
   {
     return "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
   }
