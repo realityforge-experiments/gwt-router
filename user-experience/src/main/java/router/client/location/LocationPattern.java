@@ -37,7 +37,7 @@ public final class LocationPattern
     final String[] groups = _matcher.exec( location );
     if ( null != groups )
     {
-      final HashMap<String, Object> routeData = new HashMap<>();
+      final HashMap<String, Object> matchData = new HashMap<>();
       //Group 0 is the whole string so we can skip it
       for ( int i = 1; i < groups.length; i++ )
       {
@@ -45,9 +45,9 @@ public final class LocationPattern
         final int paramIndex = i - 1;
         final String key = toKey( paramIndex );
 
-        routeData.put( key, value );
+        matchData.put( key, value );
       }
-      return routeData;
+      return matchData;
     }
     else
     {
