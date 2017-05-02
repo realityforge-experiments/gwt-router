@@ -8,6 +8,18 @@ import javax.annotation.Nullable;
 
 public final class Route
 {
+  /**
+   * This callback is final check to see if the pattern matches.
+   * The guard can modify the matchData.
+   */
+  @FunctionalInterface
+  public interface GuardCallback
+  {
+    boolean shouldMatch( @Nonnull String location,
+                         @Nonnull Route route,
+                         @Nonnull Map<String, Object> matchData );
+  }
+
   @Nonnull
   private final RegExp _matcher;
   @Nullable
@@ -121,17 +133,5 @@ public final class Route
     return null == _parameterKeys || _parameterKeys.length <= paramIndex || null == _parameterKeys[ paramIndex ] ?
            "p" + paramIndex :
            _parameterKeys[ paramIndex ];
-  }
-
-  /**
-   * This callback is final check to see if the pattern matches.
-   * The guard can modify the matchData.
-   */
-  @FunctionalInterface
-  public interface GuardCallback
-  {
-    boolean shouldMatch( @Nonnull String location,
-                         @Nonnull Route route,
-                         @Nonnull Map<String, Object> matchData );
   }
 }
