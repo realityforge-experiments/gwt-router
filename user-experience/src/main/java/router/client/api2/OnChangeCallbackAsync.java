@@ -8,5 +8,8 @@ import jsinterop.annotations.JsFunction;
 @FunctionalInterface
 public interface OnChangeCallbackAsync
 {
-  void onChange( @Nonnull RouteContext context, @Nullable String previousLocation, @Nonnull Route route, @Nonnull OnChangeControl control );
+  void onChange( @Nonnull RouteContext context,
+                 @Nullable String previousLocation,
+                 @Nonnull Route route,
+                 @Nonnull OnChangeControl control );
 }

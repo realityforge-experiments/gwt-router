@@ -62,7 +62,7 @@ public final class Route
                 @Nullable final OnEnterCallbackAsync onEnter,
                 @Nullable final OnLeaveCallbackAsync onLeave,
                 @Nonnull final List<Route> children,
-                @Nullable final Provider provider)
+                @Nullable final Provider provider )
   {
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
