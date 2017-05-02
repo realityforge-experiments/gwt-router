@@ -104,6 +104,27 @@ public final class Route
     return _provider;
   }
 
+  @Deprecated
+  @Nonnull
+  final RegExp getMatcher()
+  {
+    return _matcher;
+  }
+
+  @Deprecated
+  @Nullable
+  final String[] getParameterKeys()
+  {
+    return _parameterKeys;
+  }
+
+  @Deprecated
+  @Nullable
+  final GuardCallback getGuard()
+  {
+    return _guard;
+  }
+
   public boolean match( @Nonnull final RouteContext context, @Nonnull final String location )
   {
     Objects.requireNonNull( location );

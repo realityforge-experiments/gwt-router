@@ -96,9 +96,20 @@ public final class RouteBuilder
     return this;
   }
 
-  public void addChild( @Nonnull final Route route )
+  public RouteBuilder addChild( @Nonnull final Route route )
   {
     _children.add( route );
+    return this;
+  }
+
+  /**
+   * Avoid using this outside tests.
+   */
+  @Deprecated
+  @Nonnull
+  final List<Route> getChildren()
+  {
+    return _children;
   }
 
   @Nullable
