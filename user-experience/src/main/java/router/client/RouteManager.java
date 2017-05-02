@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import router.client.api2.Route;
 import router.client.api2.RouteContextImpl;
-import router.client.backend.RoutingBackend;
+import router.client.api2.backend.RoutingBackend;
 import router.client.route.BeforeRouteCallback;
 import router.client.route.Route2;
 import router.client.route.RouteDefinition;

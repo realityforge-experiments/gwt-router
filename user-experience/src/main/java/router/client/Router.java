@@ -5,9 +5,9 @@ import elemental2.Element;
 import elemental2.Global;
 import java.util.Objects;
 import router.client.api2.Routes;
-import router.client.backend.Elemental2RoutingBackend;
-import router.client.backend.GwtFrameworkRoutingBackend;
-import router.client.backend.RoutingBackend;
+import router.client.api2.backend.Elemental2RoutingBackend;
+import router.client.api2.backend.GwtFrameworkRoutingBackend;
+import router.client.api2.backend.RoutingBackend;
 import router.client.route.RouteDefinition;
 
 public final class Router

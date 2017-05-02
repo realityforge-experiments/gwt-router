@@ -1,4 +1,4 @@
-package router.client.backend;
+package router.client.api2.backend;
 
 import elemental2.Global;
 import elemental2.Window;
