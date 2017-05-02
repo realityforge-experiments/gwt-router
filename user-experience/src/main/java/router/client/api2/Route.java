@@ -19,6 +19,12 @@ import javax.inject.Provider;
  * - how to create components for routeFromPath. Pass in an javax.inject.Provider?
  * - which slot or view container should component.  (This should be null if no component factory, can also be null for default)
  */
+
+/**
+ * The representation of routing rule.
+ * The representation is reasonably immutable (dangerous methods are package access) and is typically
+ * created by the use of the {@link RouteBuilder}.
+ */
 public final class Route
 {
   /**
