@@ -1,11 +1,24 @@
 package router.client.api2;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Provider;
 
+/**
+ * TODO: Add hooks to determine
+ * - Should static data be added to context
+ * - should routeFromPath be updated, is that a form of caching ? or is this more to do with live update
+ * - should routeFromPath be cache, never, always if url matches, only if parameters
+ *
+ * Outcome based stuff
+ * - how to create components for routeFromPath. Pass in an javax.inject.Provider?
+ * - which slot or view container should component.  (This should be null if no component factory, can also be null for default)
+ */
 public final class Route
 {
   /**
@@ -27,61 +40,38 @@ public final class Route
   @Nullable
   private final GuardCallback _guard;
   @Nullable
-  private OnLeaveCallbackAsync _onLeave;
+  private final OnChangeCallbackAsync _onChange;
   @Nullable
-  private OnEnterCallbackAsync _onEnter;
+  private final OnEnterCallbackAsync _onEnter;
   @Nullable
-  private OnChangeCallbackAsync _onChange;
-
-  public Route( @Nonnull final String path )
-  {
-    this( new RegExp( pathToPattern( path ) ) );
-  }
+  private final OnLeaveCallbackAsync _onLeave;
+  @Nonnull
+  private final List<Route> _children;
+  @Nullable
+  private final Provider _provider;
 
   static String pathToPattern( @Nonnull final String path )
   {
     return "^" + path.replaceAll( "([\\-/\\\\\\^$\\*\\+\\?\\.\\(\\)\\|\\[\\]\\{\\}])", "\\\\$1" ) + "$";
   }
 
-  public Route( @Nonnull final RegExp matcher )
-  {
-    this( matcher, null );
-  }
-
-  public Route( @Nonnull final RegExp matcher, @Nullable final String[] parameterKeys )
-  {
-    this( matcher, parameterKeys, null );
-  }
-
   public Route( @Nonnull final RegExp matcher,
                 @Nullable final String[] parameterKeys,
-                @Nullable final GuardCallback guard )
+                @Nullable final GuardCallback guard,
+                @Nullable final OnChangeCallbackAsync onChange,
+                @Nullable final OnEnterCallbackAsync onEnter,
+                @Nullable final OnLeaveCallbackAsync onLeave,
+                @Nonnull final List<Route> children,
+                @Nullable final Provider provider)
   {
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
     _guard = guard;
-  }
-
-  @Nullable
-  public OnLeaveCallbackAsync getOnLeave()
-  {
-    return _onLeave;
-  }
-
-  public void setOnLeave( @Nullable final OnLeaveCallbackAsync onLeave )
-  {
-    _onLeave = onLeave;
-  }
-
-  @Nullable
-  public OnEnterCallbackAsync getOnEnter()
-  {
-    return _onEnter;
-  }
-
-  public void setOnEnter( @Nullable final OnEnterCallbackAsync onEnter )
-  {
+    _onChange = onChange;
     _onEnter = onEnter;
+    _onLeave = onLeave;
+    _children = Collections.unmodifiableList( Objects.requireNonNull( children ) );
+    _provider = provider;
   }
 
   @Nullable
@@ -90,9 +80,28 @@ public final class Route
     return _onChange;
   }
 
-  public void setOnChange( @Nullable final OnChangeCallbackAsync onChange )
+  @Nullable
+  public OnEnterCallbackAsync getOnEnter()
   {
-    _onChange = onChange;
+    return _onEnter;
+  }
+
+  @Nullable
+  public OnLeaveCallbackAsync getOnLeave()
+  {
+    return _onLeave;
+  }
+
+  @Nonnull
+  public List<Route> getChildren()
+  {
+    return _children;
+  }
+
+  @Nullable
+  public Provider getProvider()
+  {
+    return _provider;
   }
 
   public boolean match( @Nonnull final RouteContext context, @Nonnull final String location )

@@ -1,5 +1,6 @@
 package router.client.api2;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -62,9 +63,25 @@ public abstract class AbstractRouteManager
   @Nonnull
   private List<Route> getMatchingRoutes( @Nonnull final RouteContext context, @Nonnull final String location )
   {
-    return getRoutes().stream().
-      filter( r -> r.match( context, location ) ).
-      collect( Collectors.toList() );
+    final ArrayList<Route> results = new ArrayList<>();
+    final List<Route> routes = getRoutes();
+    collectMatches( context, location, routes, results );
+    return results;
+  }
+
+  private void collectMatches( @Nonnull final RouteContext context,
+                               @Nonnull final String location,
+                               @Nonnull final List<Route> input,
+                               @Nonnull final ArrayList<Route> output )
+  {
+    for ( final Route route : input )
+    {
+      if ( route.match( context, location ) )
+      {
+        output.add( route );
+        collectMatches( context, location, route.getChildren(), output );
+      }
+    }
   }
 
   private void runIfNonNull( @Nullable final Runnable action )

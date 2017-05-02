@@ -15,8 +15,7 @@ final class FactoryUtil
   @Nonnull
   static Route createRoute()
   {
-    final TestRegExp regExp = new TestRegExp();
-    return new Route( regExp, new String[ 0 ] );
+    return Routes.route( new TestRegExp() ).build();
   }
 
   @Nonnull

@@ -33,7 +33,8 @@ public class RouteTest
     final String location = ValueUtil.randomString();
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
-    final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
+    final Route pattern =
+      Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).build();
 
     final RouteContextImpl context = new RouteContextImpl( location );
     assertTrue( pattern.match( context, location ) );
@@ -52,7 +53,8 @@ public class RouteTest
     final String[] results = { location, "a", "b", "c" };
     final String[] parameterKeys = { "param0", null, "param2", "param3" };
     final Route.GuardCallback guard = mock( Route.GuardCallback.class );
-    final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
+    final Route pattern =
+      Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).setGuard( guard ).build();
     when( guard.shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) ) ).
       thenReturn( false );
 
@@ -75,8 +77,8 @@ public class RouteTest
       matchData.put( "param0", Integer.parseInt( (String) matchData.get( "param0" ) ) );
       return true;
     };
-    final Route pattern = new Route( new TestRegExp( results ), parameterKeys, guard );
-
+    final Route pattern =
+      Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).setGuard( guard ).build();
     final RouteContextImpl context = new RouteContextImpl( location );
     assertTrue( pattern.match( context, location ) );
 
@@ -91,7 +93,7 @@ public class RouteTest
     final String location = ValueUtil.randomString();
     final String[] results = { location };
     final String[] parameterKeys = {};
-    final Route pattern = new Route( new TestRegExp( results ), parameterKeys );
+    final Route pattern = Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).build();
 
     final RouteContextImpl context = new RouteContextImpl( location );
     assertTrue( pattern.match( context, location ) );
@@ -102,7 +104,7 @@ public class RouteTest
   @Test
   public void match_noMatch()
   {
-    final Route pattern = new Route( new TestRegExp(), new String[]{} );
+    final Route pattern = Routes.route( new TestRegExp() ).build();
     final String location = ValueUtil.randomString();
 
     final RouteContextImpl context = new RouteContextImpl( location );
@@ -115,7 +117,8 @@ public class RouteTest
   public void toKey()
   {
     final String[] parameterKeys = { "a", null, "c" };
-    final Route pattern = new Route( new TestRegExp(), parameterKeys );
+    final Route pattern =
+      Routes.route( new TestRegExp() ).setParameterKeys( parameterKeys ).build();
     assertEquals( pattern.toKey( 0 ), "a" );
     assertEquals( pattern.toKey( 1 ), "p1" );
     assertEquals( pattern.toKey( 2 ), "c" );

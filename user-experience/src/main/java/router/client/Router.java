@@ -4,11 +4,10 @@ import com.google.gwt.core.client.EntryPoint;
 import elemental2.Element;
 import elemental2.Global;
 import java.util.Objects;
+import router.client.api2.Routes;
 import router.client.backend.Elemental2RoutingBackend;
 import router.client.backend.GwtFrameworkRoutingBackend;
 import router.client.backend.RoutingBackend;
-import router.client.api2.RegExp;
-import router.client.api2.Route;
 import router.client.route.RouteDefinition;
 
 public final class Router
@@ -27,16 +26,17 @@ public final class Router
 
     final RouteDefinition[] routes = new RouteDefinition[]
       {
-        new RouteDefinition( new Route( "/" ),
+        new RouteDefinition( Routes.routeFromPath( "/" ).build(),
                              null,
                              ( route, element ) -> route2( element, "/" ),
                              null ),
-        new RouteDefinition( new Route( "/foo" ),
+        new RouteDefinition( Routes.routeFromPath( "/foo" ).build(),
                              null,
                              ( route, element ) -> route2( element, "/foo" ),
                              null ),
-        new RouteDefinition( new Route( new RegExp( "^/baz/(\\d+)/(\\d+)$" ),
-                                        new String[]{ "bazID", "buzID" } ),
+        new RouteDefinition( Routes.route( "^/baz/(\\d+)/(\\d+)$" ).
+          setParameterKeys( new String[]{ "bazID", "buzID" } ).
+                                     build(),
                              null,
                              ( route, element ) -> route2( element,
                                                            "/baz/" +
@@ -44,25 +44,27 @@ public final class Router
                                                            "/" +
                                                            route.getData( "buzID" ) ),
                              null ),
-        new RouteDefinition( new Route( new RegExp( "^/baz/(\\d+)$" ),
-                                        new String[]{ "bazID" },
-                                        ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ),
+        new RouteDefinition( Routes.route( "^/baz/(\\d+)$" ).
+          setParameterKeys( new String[]{ "bazID" } ).
+                                     setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
+                                     build(),
                              null,
                              ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
                              null ),
-        new RouteDefinition( new Route( new RegExp( "^/biz/(\\d+)$" ),
-                                        new String[]{ "bazID" },
-                                        ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ),
+        new RouteDefinition( Routes.route( "^/biz/(\\d+)$" ).
+          setParameterKeys( new String[]{ "bazID" } ).
+                                     setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
+                                     build(),
                              null,
                              ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
                              null ),
-        new RouteDefinition( new Route( new RegExp( "^/ding/(\\d+)$" ),
-                                        new String[]{ "bazID" } ),
+        new RouteDefinition( Routes.route( "^/ding/(\\d+)$" ).
+          setParameterKeys( new String[]{ "bazID" } ).build(),
                              null,
                              ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
                              route -> route2( Global.document.getElementById( "hook" ),
                                               "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ) ),
-        new RouteDefinition( new Route( new RegExp( "^/end$" ) ),
+        new RouteDefinition( Routes.route( "^/end$" ).build(),
                              null,
                              ( route, element ) ->
                              {
