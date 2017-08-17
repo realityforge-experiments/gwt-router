@@ -44,16 +44,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.geolatte.jpa:geolatte-geom-jpa:jar:0.2)
     end
 
+    def jetbrains_annotations
+      %w(org.jetbrains:annotations:jar:15.0)
+    end
+
     def findbugs_provided
       %w(com.google.code.findbugs:jsr305:jar:3.0.0 com.google.code.findbugs:annotations:jar:3.0.0)
     end
 
     def ee_provided
-      %w(javax:javaee-api:jar:7.0) + self.findbugs_provided
+      %w(javax:javaee-api:jar:7.0) + self.findbugs_provided + self.jetbrains_annotations
     end
 
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:4.1.1.164)
+      %w(fish.payara.extras:payara-embedded-all:jar:4.1.2.172 fish.payara.api:payara-api:jar:4.1.2.172)
     end
 
     def eclipselink
@@ -87,20 +91,28 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.powermock:powermock-api-support:jar:#{powermock_version}
         org.javassist:javassist:jar:3.21.0-GA
         org.powermock:powermock-module-testng-agent:jar:#{powermock_version}
-        #{powermock_javaagent}
+      #{powermock_javaagent}
       ) + self.objenesis
     end
 
     def jackson_annotations
-      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.8.8)
     end
 
     def jackson_core
-      %w(com.fasterxml.jackson.core:jackson-core:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-core:jar:2.8.8)
     end
 
     def jackson_databind
-      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.8.8)
+    end
+
+    def jackson_datatype_jdk8
+      %w(com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.8.8)
+    end
+
+    def jackson_module_kotlin
+      %w(com.fasterxml.jackson.module:jackson-module-kotlin:jar:2.8.8)
     end
 
     def jackson_gwt_support
@@ -112,15 +124,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(com.google.gwt:gwt-user:jar:2.8.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(com.google.gwt:gwt-user:jar:2.8.1 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(com.google.gwt:gwt-servlet:jar:2.8.0)
+      %w(com.google.gwt:gwt-servlet:jar:2.8.1)
     end
 
     def gwt_dev
-      'com.google.gwt:gwt-dev:jar:2.8.0'
+      'com.google.gwt:gwt-dev:jar:2.8.1'
     end
 
     def javax_inject
@@ -131,16 +143,16 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.gwt.inject:gin:jar:2.1.2) + self.javax_inject + self.guice + self.gwt_user
     end
 
-    def gwt_property_source
-      %w(org.realityforge.gwt.property-source:gwt-property-source:jar:0.2)
+    def gwt_gin_extensions
+      %w(org.realityforge.gwt.gin:gwt-gin-extensions:jar:0.1)
     end
 
     def gwt_webpoller
-      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.3)
+      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5)
     end
 
     def gwt_datatypes
-      %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.8)
+      %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.9)
     end
 
     def gwt_ga
@@ -148,11 +160,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_mmvp
-      %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.5)
+      %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.9)
     end
 
     def gwt_lognice
-      %w(org.realityforge.gwt.lognice:gwt-lognice:jar:0.4)
+      %w(org.realityforge.gwt.lognice:gwt-lognice:jar:0.6)
     end
 
     def gwt_appcache_client
@@ -172,16 +184,49 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.7)
     end
 
-    def simple_session_filter
-      %w(org.realityforge.ssf:simple-session-filter:jar:0.7)
-    end
-
     def field_filter
       %w(org.realityforge.rest.field_filter:rest-field-filter:jar:0.4)
     end
 
+    def graphql_java
+      %w(com.graphql-java:graphql-java:jar:3.0.0) + BuildrPlus::Libs.slf4j + BuildrPlus::Libs.antlr4_runtime
+    end
+
+    def graphql_java_tools
+      %w(
+        com.esotericsoftware:reflectasm:jar:1.11.3
+        com.google.guava:guava:jar:21.0
+        com.graphql-java:graphql-java-tools:jar:3.2.1
+        org.jetbrains.kotlin:kotlin-reflect:jar:1.1.1
+        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.1
+        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.3-2
+        org.ow2.asm:asm:jar:5.0.4
+        ru.vyarus:generics-resolver:jar:2.0.1
+      ) + self.graphql_java +
+        self.jackson_annotations +
+        self.jackson_core +
+        self.jackson_databind +
+        self.jackson_datatype_jdk8 +
+        self.jackson_module_kotlin +
+      self.jetbrains_annotations
+    end
+
+    def graphql_java_servlet
+      %w(
+        com.graphql-java:graphql-java-servlet:jar:4.0.0
+        commons-fileupload:commons-fileupload:jar:1.3.3
+        commons-io:commons-io:jar:2.5
+      ) + self.graphql_java_tools
+    end
+
+    def antlr4_runtime
+      %w(org.antlr:antlr4-runtime:jar:4.5.1)
+    end
+
     def rest_criteria
-      %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.4 org.antlr:antlr4-runtime:jar:4.3 org.antlr:antlr4-annotations:jar:4.3) + self.field_filter
+      %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.6) +
+        self.antlr4_runtime +
+        self.field_filter
     end
 
     def commons_logging
@@ -214,7 +259,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_domgen_support
-      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.3)
+      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.4)
+    end
+
+    def keycloak_authfilter
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.2)
+    end
+
+    def keycloak_converger
+      'org.realityforge.keycloak.converger:keycloak-converger:jar:1.6'
     end
 
     def jboss_logging
@@ -237,12 +290,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
+    def simple_keycloak_service
+      %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.1)
+    end
+
     def replicant_version
-      '0.5.74'
+      '0.5.91'
     end
 
     def replicant_shared
       %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
+    end
+
+    def replicant_shared_ee
+      %W(org.realityforge.replicant:replicant-shared-ee:jar:#{replicant_version})
     end
 
     def replicant_client_common
@@ -254,15 +315,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_ee_client
-      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common
+      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common + self.replicant_shared_ee
     end
 
     def replicant_gwt_client
-      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common + self.gwt_property_source
+      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common
     end
 
     def replicant_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.simple_session_filter + self.gwt_rpc + self.field_filter
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.gwt_rpc + self.replicant_shared_ee
     end
 
     def gwt_rpc
@@ -277,8 +338,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.awaitility:awaitility:jar:2.0.0)
     end
 
+    def testng_version
+      '6.11'
+    end
+
     def testng
-      %w(org.testng:testng:jar:6.11)
+      %W(org.testng:testng:jar:#{testng_version})
     end
 
     def jndikit
@@ -290,7 +355,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_lib
-      'org.realityforge.guiceyloops:guiceyloops:jar:0.83'
+      'org.realityforge.guiceyloops:guiceyloops:jar:0.94'
     end
 
     def guiceyloops_gwt
@@ -298,11 +363,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_timers_domain
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-domain:json:0.4)
+      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-domain:json:0.6)
     end
 
     def glassfish_timers_db
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-db:jar:0.4)
+      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-db:jar:0.6)
     end
 
     def slf4j

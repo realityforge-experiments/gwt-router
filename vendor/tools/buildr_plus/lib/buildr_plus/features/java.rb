@@ -24,8 +24,28 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
   end
   f.enhance(:ProjectExtension) do
     before_define do |project|
+      project.compile.options.lint = 'all'
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
     end
+
+    after_define do |project|
+      project.test.options[:properties].merge!('user.timezone' => 'Australia/Melbourne')
+
+      t = project.task 'java:check' do
+        (project.test.compile.sources + project.compile.sources).each do |src|
+          Dir.glob("#{src}/**/*").select { |f| File.directory? f }.each do |d|
+            dir = d[src.size + 1, 10000000]
+            if dir.include?('.')
+              raise "The directory #{d} included in java source path has a path component that includes the '.' character. This violates package name conventions."
+            end
+          end
+        end
+      end
+      project.task(':java:check').enhance([t.name])
+    end
+
+    desc 'Check the directories in java source tree do not have . character'
+    task 'java:check'
   end
 end

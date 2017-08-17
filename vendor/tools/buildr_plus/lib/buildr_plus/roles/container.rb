@@ -17,7 +17,7 @@ BuildrPlus::Roles.role(:container) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = []
 
-    generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+    generators << [:redfish_fragment] if BuildrPlus::FeatureManager.activated?(:redfish)
     generators << [:keycloak_client_config] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
     generators += project.additional_domgen_generators
@@ -63,6 +63,18 @@ BuildrPlus::Roles.role(:container) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:keycloak)
+    environment = BuildrPlus::Config.application_config.environment_by_key(:test)
+    default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
+    default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
+    default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
+    default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
+    default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
+    BuildrPlus::Keycloak.clients.each do |client|
+      default_testng_args << "-D#{client.client_type}.keycloak.client=#{client.auth_client.name('test')}"
+    end
+  end
+
   default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
 
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
@@ -81,10 +93,9 @@ BuildrPlus::Roles.role(:container) do
         nil
 
     dependencies = [server_project, model_project, shared_project].compact
-    dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
-    # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     dependencies << BuildrPlus::Deps.findbugs_provided
-    dependencies << BuildrPlus::Deps.model_compile_deps
+    dependencies << BuildrPlus::Deps.jetbrains_annotations
     dependencies << BuildrPlus::Deps.server_compile_deps
 
     war_module_names = [server_project.iml.name]
@@ -106,21 +117,23 @@ BuildrPlus::Roles.role(:container) do
     local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
     ipr.add_glassfish_remote_configuration(project,
-                                           :server_name => 'GlassFish 4.1.1.164',
+                                           :server_name => 'GlassFish 4.1.2.172',
                                            :exploded => [project.name],
                                            :packaged => remote_packaged_apps)
-    ipr.add_glassfish_configuration(project,
-                                    :server_name => 'GlassFish 4.1.1.164',
-                                    :exploded => [project.name],
-                                    :packaged => local_packaged_apps)
-
-    if local_packaged_apps.size > 0
-      only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+    unless BuildrPlus::Redfish.local_domain_update_only?
       ipr.add_glassfish_configuration(project,
-                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.164",
-                                      :server_name => 'GlassFish 4.1.1.164',
+                                      :server_name => 'GlassFish 4.1.2.172',
                                       :exploded => [project.name],
-                                      :packaged => only_packaged_apps)
+                                      :packaged => local_packaged_apps)
+
+      if local_packaged_apps.size > 0
+        only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+        ipr.add_glassfish_configuration(project,
+                                        :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.2.172",
+                                        :server_name => 'GlassFish 4.1.2.172',
+                                        :exploded => [project.name],
+                                        :packaged => only_packaged_apps)
+      end
     end
 
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
@@ -128,10 +141,18 @@ BuildrPlus::Roles.role(:container) do
       gwt_modules.each do |gwt_module|
         short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1')
         path = short_name.gsub(/^#{Reality::Naming.pascal_case(project.name)}/, '')
-        path = "#{Reality::Naming.underscore(path)}.html" if path.size > 0
+        if path.size > 0
+          server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
+          %w(html jsp).each do |extension|
+            candidate = "#{Reality::Naming.underscore(path)}.#{extension}"
+            path = candidate if File.exist?(server_project._(:source, :main, :webapp_local, candidate))
+          end
+        end
+        iml.excluded_directories << project._('tmp/gwt')
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
-                                  :vm_parameters => '-Xmx3G',
+                                  :start_javascript_debugger => false,
+                                  :vm_parameters => "-Xmx3G -Djava.io.tmpdir=#{_('tmp/gwt')}",
                                   :shell_parameters => "-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end

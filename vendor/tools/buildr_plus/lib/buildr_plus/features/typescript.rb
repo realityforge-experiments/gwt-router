@@ -12,10 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:compile_options) do |f|
-  f.enhance(:ProjectExtension) do
-    before_define do |project|
-      project.compile.options.lint = 'all'
-    end
-  end
-end
+BuildrPlus::FeatureManager.feature(:typescript => [:javascript])

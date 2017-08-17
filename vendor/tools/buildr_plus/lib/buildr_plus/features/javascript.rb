@@ -12,5 +12,4 @@
 # limitations under the License.
 #
 
-# Jenkins utility library
-BuildrPlus::FeatureManager.feature(:kinjen)
+BuildrPlus::FeatureManager.feature(:javascript)

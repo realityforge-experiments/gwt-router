@@ -12,10 +12,17 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:selenium) do |f|
+BuildrPlus::FeatureManager.feature(:clean) do |f|
   f.enhance(:ProjectExtension) do
-    first_time do
-      require 'buildr_plus/patches/selenium'
+    after_define do |project|
+
+      if project.ipr?
+        desc 'Purge all artifacts. Including those used by IDEA.'
+        project.task(':real_clean' => %(clean)) do
+          FileUtils.rm_rf project._('artifacts')
+          FileUtils.rm_rf project._('tmp/gwt')
+        end
+      end
     end
   end
 end

@@ -12,10 +12,9 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:model_qa_support) do
+BuildrPlus::Roles.role(:integration_qa_shared) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = BuildrPlus::Deps.model_qa_support_main_generators + project.additional_domgen_generators
-
+    generators = BuildrPlus::Deps.integration_qa_shared_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end
@@ -23,9 +22,9 @@ BuildrPlus::Roles.role(:model_qa_support) do
 
   project.publish = BuildrPlus::Artifacts.model?
 
-  compile.with BuildrPlus::Deps.model_qa_support_deps
+  compile.with BuildrPlus::Deps.integration_qa_shared_deps
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model_qa_support)
 
   package(:jar)
   package(:sources)

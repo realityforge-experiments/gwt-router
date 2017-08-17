@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt => [:jackson]) do |f|
+BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:Config) do
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
@@ -63,7 +63,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson]) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       require 'buildr/gwt'
-      require 'buildr_plus/patches/gwt'
     end
 
     def top_level_gwt_modules
