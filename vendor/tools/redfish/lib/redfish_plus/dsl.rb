@@ -71,7 +71,7 @@ module RedfishPlus
         setup_orb_to_support_resource_adapter(domain)
       end
 
-      domain.data['jvm_options']['options'] << '-ea' << '-da:org.glassfish.common.util...'
+      domain.data['jvm_options']['options'] << '-ea'
     end
 
     def common_domain_setup(domain)
@@ -468,7 +468,6 @@ module RedfishPlus
       custom_resource_from_env(domain, "#{prefix}/subscriptionsDebugOutputEnabled", nil, 'java.lang.Boolean', 'false')
       custom_resource_from_env(domain, "#{prefix}/shouldValidateRepositoryOnLoad", nil, 'java.lang.Boolean', 'false')
       custom_resource_from_env(domain, "#{prefix}/requestDebugOutputEnabled", nil, 'java.lang.Boolean', 'false')
-      add_managed_scheduled_executor_service(domain, "#{prefix}/ManagedScheduledExecutorService")
     end
 
     def jms_connection_factory(domain, name)
