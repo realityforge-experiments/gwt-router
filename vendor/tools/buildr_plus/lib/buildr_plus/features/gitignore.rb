@@ -62,9 +62,11 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/dataSources'
       end
 
-      gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
+      if BuildrPlus::FeatureManager.activated?(:node)
+        gitignores << '/node_modules'
+      end
 
-      gitignores << '/downloads' if BuildrPlus::FeatureManager.activated?(:role_selenium_tests)
+      gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
       gitignores << '/volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
 

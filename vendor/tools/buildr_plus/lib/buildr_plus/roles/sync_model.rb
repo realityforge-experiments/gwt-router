@@ -15,7 +15,7 @@
 BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:sync_master_ejb_impl, :ejb_services]
+    generators = [:sync_master_ejb_impl, :ejb_services, :sync_remote_sync_service]
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
@@ -32,6 +32,7 @@ BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
 
   compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter])
   compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client])
+  compile.with Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter]) if BuildrPlus::FeatureManager.activated?(:keycloak)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
 

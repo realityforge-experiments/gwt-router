@@ -12,12 +12,12 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_shared, :soap]) do
+BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_shared]) do
 
   project.publish = BuildrPlus::Artifacts.replicant_ee_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter, :ee_cdi_qualifier, :ee_messages]
+    generators = [:imit_client_entity_ee, :imit_client_dao_ee, :imit_client_dao, :ee_data_types, :ee_exceptions, :jws_type_converter, :ee_cdi_qualifier, :ee_messages]
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
@@ -34,23 +34,14 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
     end
   end
 
-  compile.with BuildrPlus::Libs.ee_provided
-  compile.with BuildrPlus::Libs.glassfish_embedded
-  compile.with BuildrPlus::Libs.replicant_ee_client
+  compile.with BuildrPlus::Deps.replicant_ee_client_deps
+  test.with BuildrPlus::Deps.replicant_ee_client_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :soap_client)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :replicant_qa_support)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :soap_qa_support)
 
-  test.with BuildrPlus::Libs.mockito
-
   package(:jar)
   package(:sources)
-
-  p = project.root_project
-
-  check package(:jar), 'should contain generated source files' do
-    it.should contain("#{p.group_as_path}/client/net/ee/Abstract#{p.name_as_class}EeDataLoaderServiceImpl.class")
-  end if BuildrPlus::Domgen.enforce_package_name?
 end

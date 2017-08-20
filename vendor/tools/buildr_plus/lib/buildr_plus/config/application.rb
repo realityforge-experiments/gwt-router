@@ -59,14 +59,17 @@ module BuildrPlus #nodoc
           environment.databases.each do |database|
             key = database.key.to_s == 'default' ? environment.key.to_s : "#{database.key}_#{environment.key}"
             results[key] = {}
+            results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
             results[key]['host'] = database.host
             results[key]['port'] = database.port
             results[key]['database'] = database.database
             results[key]['username'] = database.admin_username
             results[key]['password'] = database.admin_password
-            if BuildrPlus::Db.mssql?
+            if database.is_a?(MssqlDatabaseConfig)
               results[key]['force_drop'] = true
               results[key]['timeout'] = 10000 unless jruby
+              results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
+              results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
               results[key]['backup_name'] = database.backup_name if database.backup_name
               results[key]['restore_name'] = database.restore_name if database.restore_name
               results[key]['backup_location'] = database.backup_location if database.backup_location
@@ -76,12 +79,13 @@ module BuildrPlus #nodoc
               import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
               unless results[import_key]
                 results[import_key] = {}
+                results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
                 results[import_key]['host'] = database.host
                 results[import_key]['port'] = database.port
                 results[import_key]['database'] = database.import_from
                 results[import_key]['username'] = database.admin_username
                 results[import_key]['password'] = database.admin_password
-                if BuildrPlus::Db.mssql?
+                if database.is_a?(MssqlDatabaseConfig)
                   results[import_key]['force_drop'] = true
                   results[import_key]['timeout'] = 10000 unless jruby
                 end
@@ -93,20 +97,21 @@ module BuildrPlus #nodoc
             if environment.key.to_s == 'test'
               key = database.key.to_s == 'default' ? 'import_test' : "#{database.key}_import_test"
               results[key] = {}
+              results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
               results[key]['host'] = database.host
               results[key]['port'] = database.port
               results[key]['database'] = database.key.to_s == 'default' ? database.database : (database.import_from || database.database)
               results[key]['username'] = database.admin_username
               results[key]['password'] = database.admin_password
-              if BuildrPlus::Db.mssql?
+              if database.is_a?(MssqlDatabaseConfig)
                 results[key]['force_drop'] = true
                 results[key]['timeout'] = 10000 unless jruby
+                results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
+                results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
                 results[key]['backup_name'] = database.backup_name if database.backup_name
                 results[key]['restore_name'] = database.restore_name if database.restore_name
                 results[key]['backup_location'] = database.backup_location if database.backup_location
                 results[key]['delete_backup_history'] = database.delete_backup_history? if database.delete_backup_history_set?
-                results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
-                results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
               end
             end
           end

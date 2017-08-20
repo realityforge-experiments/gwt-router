@@ -23,7 +23,8 @@ BuildrPlus::Roles.role(:all_in_one) do
       generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
-    generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+    generators << [:redfish_fragment] if BuildrPlus::FeatureManager.activated?(:redfish)
+    generators << [:keycloak_client_config] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
     generators += project.additional_domgen_generators
 
@@ -33,16 +34,14 @@ BuildrPlus::Roles.role(:all_in_one) do
   end
 
   compile.with BuildrPlus::Deps.server_deps
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
 
   test.with BuildrPlus::Deps.model_qa_support_deps
 
   package(:war).tap do |war|
     war.libs.clear
-    war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
-    # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
-    war.libs << BuildrPlus::Deps.model_compile_deps
+    war.libs << BuildrPlus::Deps.jetbrains_annotations
     war.libs << BuildrPlus::Deps.server_compile_deps
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
     if BuildrPlus::FeatureManager.activated?(:sass)
@@ -50,21 +49,10 @@ BuildrPlus::Roles.role(:all_in_one) do
         war.exclude project._(sass_path)
       end
     end
-    war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less) || BuildrPlus::FeatureManager.activated?(:sass)
+    project.assets.paths.each do |asset_dir|
+      war.include asset_dir, :as => '.'
+    end
   end
-
-  check package(:war), 'should contain generated gwt artifacts' do
-    it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
-  end if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
-  check package(:war), 'should contain web.xml' do
-    it.should contain('WEB-INF/web.xml')
-  end
-  check package(:war), 'should not contain less files' do
-    it.should_not contain('**/*.less')
-  end if BuildrPlus::FeatureManager.activated?(:less)
-  check package(:war), 'should not contain sass files' do
-    it.should_not contain('**/*.sass')
-  end if BuildrPlus::FeatureManager.activated?(:sass)
 
   iml.add_jpa_facet if BuildrPlus::FeatureManager.activated?(:db)
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
@@ -107,10 +95,9 @@ BuildrPlus::Roles.role(:all_in_one) do
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 
   dependencies = [project]
-  dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
-  # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+  # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
   dependencies << BuildrPlus::Deps.findbugs_provided
-  dependencies << BuildrPlus::Deps.model_compile_deps
+  dependencies << BuildrPlus::Deps.jetbrains_annotations
   dependencies << BuildrPlus::Deps.server_compile_deps
 
   war_module_names = [project.iml.name]
@@ -130,20 +117,22 @@ BuildrPlus::Roles.role(:all_in_one) do
   local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
   ipr.add_glassfish_remote_configuration(project,
-                                         :server_name => 'GlassFish 4.1.1.164',
+                                         :server_name => 'GlassFish 4.1.2.172',
                                          :exploded => [project.name],
                                          :packaged => remote_packaged_apps)
-  ipr.add_glassfish_configuration(project,
-                                  :server_name => 'GlassFish 4.1.1.164',
-                                  :exploded => [project.name],
-                                  :packaged => local_packaged_apps)
-
-  if local_packaged_apps.size > 0
-    only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+  unless BuildrPlus::Redfish.local_domain_update_only?
     ipr.add_glassfish_configuration(project,
-                                    :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.164",
-                                    :server_name => 'GlassFish 4.1.1.164',
+                                    :server_name => 'GlassFish 4.1.2.172',
                                     :exploded => [project.name],
-                                    :packaged => only_packaged_apps)
+                                    :packaged => local_packaged_apps)
+
+    if local_packaged_apps.size > 0
+      only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+      ipr.add_glassfish_configuration(project,
+                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.2.172",
+                                      :server_name => 'GlassFish 4.1.2.172',
+                                      :exploded => [project.name],
+                                      :packaged => only_packaged_apps)
+    end
   end
 end
