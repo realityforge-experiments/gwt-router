@@ -6,7 +6,7 @@ PROVIDED_DEPS = [:javax_jsr305, :jetbrains_annotations, :anodoc]
 TEST_DEPS = [:mockito, :guiceyloops]
 
 # JDK options passed to test environment. Essentially turns assertions on.
-REACT_TEST_OPTIONS =
+TEST_OPTIONS =
   {
     'braincheck.environment' => 'development'
   }
@@ -34,7 +34,7 @@ define 'gwt-router' do
                  :elemental2_promise,
                  :braincheck
 
-    test.options[:properties] = REACT_TEST_OPTIONS
+    test.options[:properties] = TEST_OPTIONS
     test.options[:java_args] = ['-ea']
 
     gwt_enhance(project, :modules_complete => true, :package_jars => false)
