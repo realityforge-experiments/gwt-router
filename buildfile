@@ -32,9 +32,7 @@ define 'gwt-router' do
                  :jsinterop_annotations_sources,
                  :elemental2_dom,
                  :elemental2_promise,
-                 :braincheck,
-                 # Next dependency can probably moved to example module when possible
-                 :gwt_user
+                 :braincheck
 
     test.options[:properties] = REACT_TEST_OPTIONS
     test.options[:java_args] = ['-ea']
