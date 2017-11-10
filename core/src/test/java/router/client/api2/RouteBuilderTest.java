@@ -1,6 +1,5 @@
 package router.client.api2;
 
-import javax.inject.Provider;
 import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.AssertJUnit.assertEquals;
@@ -20,7 +19,6 @@ public class RouteBuilderTest
     assertEquals( b.getOnEnter(), null );
     assertEquals( b.getOnLeave(), null );
     assertEquals( b.getParameterKeys(), null );
-    assertEquals( b.getProvider(), null );
     assertEquals( b.getChildren().size(), 0 );
 
     final Route r = b.build();
@@ -30,7 +28,6 @@ public class RouteBuilderTest
     assertEquals( r.getOnEnter(), null );
     assertEquals( r.getOnLeave(), null );
     assertEquals( r.getParameterKeys(), null );
-    assertEquals( r.getProvider(), null );
     assertEquals( r.getChildren().size(), 0 );
   }
 
@@ -39,7 +36,6 @@ public class RouteBuilderTest
   {
     final TestRegExp matcher = new TestRegExp();
     final Route.GuardCallback guard = mock( Route.GuardCallback.class );
-    final Provider provider = mock( Provider.class );
     final OnChangeCallbackAsync onChange = mock( OnChangeCallbackAsync.class );
     final OnEnterCallbackAsync onEnter = mock( OnEnterCallbackAsync.class );
     final OnLeaveCallbackAsync onLeave = mock( OnLeaveCallbackAsync.class );
@@ -50,8 +46,7 @@ public class RouteBuilderTest
         setOnChange( onChange ).
         setOnEnter( onEnter ).
         setOnLeave( onLeave ).
-        setParameterKeys( parameterKeys ).
-        setProvider( provider );
+        setParameterKeys( parameterKeys );
 
     assertEquals( b.getMatcher(), matcher );
     assertEquals( b.getGuard(), guard );
@@ -59,7 +54,6 @@ public class RouteBuilderTest
     assertEquals( b.getOnEnter(), onEnter );
     assertEquals( b.getOnLeave(), onLeave );
     assertEquals( b.getParameterKeys(), parameterKeys );
-    assertEquals( b.getProvider(), provider );
     assertEquals( b.getChildren().size(), 0 );
 
     final Route r = b.build();
@@ -69,7 +63,6 @@ public class RouteBuilderTest
     assertEquals( r.getOnEnter(), onEnter );
     assertEquals( r.getOnLeave(), onLeave );
     assertEquals( r.getParameterKeys(), parameterKeys );
-    assertEquals( r.getProvider(), provider );
     assertEquals( r.getChildren().size(), 0 );
   }
 }

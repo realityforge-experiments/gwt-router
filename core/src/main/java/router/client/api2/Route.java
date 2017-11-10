@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 /**
  * TODO: Add hooks to determine
@@ -53,8 +52,6 @@ public final class Route
   private final OnLeaveCallbackAsync _onLeave;
   @Nonnull
   private final List<Route> _children;
-  @Nullable
-  private final Provider _provider;
 
   static String pathToPattern( @Nonnull final String path )
   {
@@ -67,8 +64,7 @@ public final class Route
                 @Nullable final OnChangeCallbackAsync onChange,
                 @Nullable final OnEnterCallbackAsync onEnter,
                 @Nullable final OnLeaveCallbackAsync onLeave,
-                @Nonnull final List<Route> children,
-                @Nullable final Provider provider )
+                @Nonnull final List<Route> children )
   {
     _parameterKeys = parameterKeys;
     _matcher = Objects.requireNonNull( matcher );
@@ -77,7 +73,6 @@ public final class Route
     _onEnter = onEnter;
     _onLeave = onLeave;
     _children = Collections.unmodifiableList( Objects.requireNonNull( children ) );
-    _provider = provider;
   }
 
   @Nullable
@@ -102,12 +97,6 @@ public final class Route
   public List<Route> getChildren()
   {
     return _children;
-  }
-
-  @Nullable
-  public Provider getProvider()
-  {
-    return _provider;
   }
 
   @Deprecated

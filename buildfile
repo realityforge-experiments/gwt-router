@@ -3,7 +3,7 @@ require 'buildr/gpg'
 require 'buildr/single_intermediate_layout'
 
 PROVIDED_DEPS = [:javax_jsr305, :jetbrains_annotations, :anodoc]
-TEST_DEPS = []
+TEST_DEPS = [:mockito, :guiceyloops]
 
 # JDK options passed to test environment. Essentially turns assertions on.
 REACT_TEST_OPTIONS =
@@ -30,6 +30,8 @@ define 'gwt-router' do
                  :jsinterop_base_sources,
                  :jsinterop_annotations,
                  :jsinterop_annotations_sources,
+                 :elemental2_dom,
+                 :elemental2_promise,
                  :braincheck,
                  # Next dependency can probably moved to example module when possible
                  :gwt_user

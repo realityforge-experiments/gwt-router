@@ -1,13 +1,11 @@
 package router.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import elemental2.Element;
-import elemental2.Global;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.Element;
 import java.util.Objects;
 import router.client.api2.Routes;
 import router.client.api2.backend.Elemental2RoutingBackend;
-import router.client.api2.backend.GwtFrameworkRoutingBackend;
-import router.client.api2.backend.RoutingBackend;
 import router.client.route.RouteDefinition;
 
 public final class Router
@@ -22,7 +20,7 @@ public final class Router
 
   public void onModuleLoad()
   {
-    final Element rootElement = Global.document.getElementById( "hook" );
+    final Element rootElement = DomGlobal.document.getElementById( "hook" );
 
     final RouteDefinition[] routes = new RouteDefinition[]
       {
@@ -36,7 +34,7 @@ public final class Router
                              null ),
         new RouteDefinition( Routes.route( "^/baz/(\\d+)/(\\d+)$" ).
           setParameterKeys( new String[]{ "bazID", "buzID" } ).
-                                     build(),
+          build(),
                              null,
                              ( route, element ) -> route2( element,
                                                            "/baz/" +
@@ -46,15 +44,15 @@ public final class Router
                              null ),
         new RouteDefinition( Routes.route( "^/baz/(\\d+)$" ).
           setParameterKeys( new String[]{ "bazID" } ).
-                                     setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
-                                     build(),
+          setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
+          build(),
                              null,
                              ( route, element ) -> route2( element, "/baz/" + route.getData( "bazID" ) ),
                              null ),
         new RouteDefinition( Routes.route( "^/biz/(\\d+)$" ).
           setParameterKeys( new String[]{ "bazID" } ).
-                                     setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
-                                     build(),
+          setGuard( ( ( l, p, data ) -> Objects.equals( data.get( "bazID" ), "42" ) ) ).
+          build(),
                              null,
                              ( route, element ) -> route2( element, "/biz/" + route.getData( "bazID" ) ),
                              null ),
@@ -62,7 +60,7 @@ public final class Router
           setParameterKeys( new String[]{ "bazID" } ).build(),
                              null,
                              ( route, element ) -> route2( element, "/ding/" + route.getData( "bazID" ) ),
-                             route -> route2( Global.document.getElementById( "hook" ),
+                             route -> route2( DomGlobal.document.getElementById( "hook" ),
                                               "/ding/" + route.getData( "bazID" ) + " (NoRoute)" ) ),
         new RouteDefinition( Routes.route( "^/end$" ).build(),
                              null,
@@ -74,10 +72,7 @@ public final class Router
                              null ),
         };
 
-    final boolean useElemental = true;
-    @SuppressWarnings( "ConstantConditions" ) final RoutingBackend backend =
-      useElemental ? new Elemental2RoutingBackend() : new GwtFrameworkRoutingBackend();
-    _routeManager = new RouteManager( backend, rootElement );
+    _routeManager = new RouteManager( new Elemental2RoutingBackend(), rootElement );
     _routeManager.setDefaultLocation( "/" );
     for ( final RouteDefinition route : routes )
     {
@@ -92,23 +87,23 @@ public final class Router
     catch ( final Exception e )
     {
       warn( "Unexpected problem initializing the Router application: " + e );
-      Global.window.alert( "Error: " + e.getMessage() );
+      DomGlobal.window.alert( "Error: " + e.getMessage() );
     }
   }
 
   public static native void error( String message ) /*-{
-    window.console.error( message );
+    window.console.error(message);
   }-*/;
 
   public static native void warn( String message ) /*-{
-    window.console.warn( message );
+    window.console.warn(message);
   }-*/;
 
   public static native void info( String message ) /*-{
-    window.console.info( message );
+    window.console.info(message);
   }-*/;
 
   public static native void log( String message ) /*-{
-    window.console.log( message );
+    window.console.log(message);
   }-*/;
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 public final class RouteBuilder
 {
@@ -22,8 +21,6 @@ public final class RouteBuilder
   private OnLeaveCallbackAsync _onLeave;
   @Nonnull
   private final List<Route> _children = new ArrayList<>();
-  @Nullable
-  private Provider _provider;
 
   public RouteBuilder( @Nonnull final RegExp matcher )
   {
@@ -112,21 +109,9 @@ public final class RouteBuilder
     return _children;
   }
 
-  @Nullable
-  public Provider getProvider()
-  {
-    return _provider;
-  }
-
-  public RouteBuilder setProvider( @Nullable final Provider provider )
-  {
-    _provider = provider;
-    return this;
-  }
-
   @Nonnull
   public Route build()
   {
-    return new Route( _matcher, _parameterKeys, _guard, _onChange, _onEnter, _onLeave, _children, _provider );
+    return new Route( _matcher, _parameterKeys, _guard, _onChange, _onEnter, _onLeave, _children );
   }
 }
