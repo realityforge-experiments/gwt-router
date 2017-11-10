@@ -4,6 +4,7 @@ import elemental2.dom.DomGlobal;
 import elemental2.dom.EventListener;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import jsinterop.base.JsPropertyMap;
 
 public class Elemental2RoutingBackend
   implements RoutingBackend
@@ -12,14 +13,15 @@ public class Elemental2RoutingBackend
   @Override
   public String getHash()
   {
-    final String hash = JsObjects.get( DomGlobal.window.location, "hash" );
+    final String hash = (String) JsPropertyMap.of( DomGlobal.window.location ).get( "hash" );
     return null == hash ? null : hash.substring( 1 );
   }
 
   @Override
   public void setHash( @Nullable final String hash )
   {
-    JsObjects.set( DomGlobal.window.location, "hash", null == hash ? null : "#" + hash );
+    final String value = null == hash ? null : "#" + hash;
+    JsPropertyMap.of( DomGlobal.window.location ).set( "hash", value );
   }
 
   @Override
