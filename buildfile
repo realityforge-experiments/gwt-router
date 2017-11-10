@@ -25,11 +25,11 @@ define 'gwt-router' do
     pom.provided_dependencies.concat PROVIDED_DEPS
 
     compile.with PROVIDED_DEPS,
-                 :elemental2_core,
                  :jsinterop_base,
                  :jsinterop_base_sources,
                  :jsinterop_annotations,
                  :jsinterop_annotations_sources,
+                 :elemental2_core,
                  :elemental2_dom,
                  :elemental2_promise,
                  :braincheck
