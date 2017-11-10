@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='router'>
   <inherits name='router.Router'/>
-  <inherits name="com.google.gwt.logging.Logging"/>
 
-  <set-property name="gwt.logging.enabled" value="TRUE"/>
+  <source path='ignore'/>
 </module>
