@@ -1,5 +1,6 @@
 package router.client.api2;
 
+import elemental2.core.RegExp;
 import javax.annotation.Nonnull;
 
 public final class Routes

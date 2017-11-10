@@ -1,5 +1,6 @@
 package router.client.api2;
 
+import elemental2.core.RegExp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;

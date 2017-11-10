@@ -1,7 +1,7 @@
 package router.client.api2;
 
+import elemental2.core.RegExp;
 import javax.annotation.Nonnull;
-import router.client.api2.RegExp;
 
 public class TestRegExp
   extends RegExp
