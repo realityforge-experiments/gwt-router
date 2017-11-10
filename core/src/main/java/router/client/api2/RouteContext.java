@@ -9,8 +9,5 @@ import javax.annotation.Nonnull;
 public interface RouteContext
 {
   @Nonnull
-  String getLocation();
-
-  @Nonnull
   Map<String, Object> getParameters();
 }

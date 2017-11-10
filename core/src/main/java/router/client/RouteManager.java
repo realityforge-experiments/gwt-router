@@ -96,7 +96,7 @@ public final class RouteManager
     for ( final RouteDefinition definition : _routes )
     {
       final Route pattern = definition.getLocation();
-      final RouteContextImpl context = new RouteContextImpl( location );
+      final RouteContextImpl context = new RouteContextImpl();
       if ( pattern.match( context, location ) )
       {
         final Route2 route = new Route2( context, definition );

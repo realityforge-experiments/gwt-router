@@ -36,7 +36,7 @@ public class RouteTest
     final Route pattern =
       Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).build();
 
-    final RouteContextImpl context = new RouteContextImpl( location );
+    final RouteContextImpl context = new RouteContextImpl();
     assertTrue( pattern.match( context, location ) );
 
     final Map<String, Object> matchData = context.getParameters();
@@ -58,7 +58,7 @@ public class RouteTest
     when( guard.shouldMatch( eq( location ), eq( pattern ), anyMapOf( String.class, Object.class ) ) ).
       thenReturn( false );
 
-    final RouteContextImpl context = new RouteContextImpl( location );
+    final RouteContextImpl context = new RouteContextImpl();
     assertFalse( pattern.match( context, location ) );
 
     assertEquals( context.getParameters().size(), 0 );
@@ -79,7 +79,7 @@ public class RouteTest
     };
     final Route pattern =
       Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).setGuard( guard ).build();
-    final RouteContextImpl context = new RouteContextImpl( location );
+    final RouteContextImpl context = new RouteContextImpl();
     assertTrue( pattern.match( context, location ) );
 
     final Map<String, Object> matchData = context.getParameters();
@@ -95,7 +95,7 @@ public class RouteTest
     final String[] parameterKeys = {};
     final Route pattern = Routes.route( new TestRegExp( results ) ).setParameterKeys( parameterKeys ).build();
 
-    final RouteContextImpl context = new RouteContextImpl( location );
+    final RouteContextImpl context = new RouteContextImpl();
     assertTrue( pattern.match( context, location ) );
 
     assertEquals( context.getParameters().size(), 0 );
@@ -107,7 +107,7 @@ public class RouteTest
     final Route pattern = Routes.route( new TestRegExp() ).build();
     final String location = ValueUtil.randomString();
 
-    final RouteContextImpl context = new RouteContextImpl( location );
+    final RouteContextImpl context = new RouteContextImpl();
     assertFalse( pattern.match( context, location ) );
 
     assertEquals( context.getParameters().size(), 0 );
