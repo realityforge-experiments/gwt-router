@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.realityforge.anodoc.TestOnly;
 
 /**
  * TODO: Add hooks to determine
@@ -99,21 +100,21 @@ public final class Route
     return _children;
   }
 
-  @Deprecated
+  @TestOnly
   @Nonnull
   final RegExp getMatcher()
   {
     return _matcher;
   }
 
-  @Deprecated
+  @TestOnly
   @Nullable
   final String[] getParameterKeys()
   {
     return _parameterKeys;
   }
 
-  @Deprecated
+  @TestOnly
   @Nullable
   final GuardCallback getGuard()
   {

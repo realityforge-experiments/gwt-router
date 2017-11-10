@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.realityforge.anodoc.TestOnly;
 
 public final class RouteBuilder
 {
@@ -99,10 +100,7 @@ public final class RouteBuilder
     return this;
   }
 
-  /**
-   * Avoid using this outside tests.
-   */
-  @Deprecated
+  @TestOnly
   @Nonnull
   final List<Route> getChildren()
   {
