@@ -2,7 +2,7 @@
   "vendor/tools/buildr_plus": {
     "url": "https://github.com/realityforge/buildr_plus.git",
     "branch": "master",
-    "revision": "4a4a0666871861de1ddc7581a02d6d656702fa6b"
+    "revision": "a2cdd058760c33094077ebfc8a069b89f2395f40"
   },
   "vendor/tools/redfish": {
     "url": "https://github.com/realityforge/redfish.git",
