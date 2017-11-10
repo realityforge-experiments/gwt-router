@@ -1,14 +1,61 @@
-require 'buildr_plus'
-BuildrPlus::FeatureManager.activate_features([:oss, :travis])
-require 'buildr_plus/projects/java_multimodule'
+require 'buildr/git_auto_version'
+require 'buildr/gpg'
+require 'buildr/single_intermediate_layout'
 
-BuildrPlus::Roles.project('router') do
-  project.comment = 'router: A play project to test routing'
-  project.group = 'router'
+PROVIDED_DEPS = [:javax_jsr305, :jetbrains_annotations, :anodoc]
+TEST_DEPS = []
+
+# JDK options passed to test environment. Essentially turns assertions on.
+REACT_TEST_OPTIONS =
+  {
+    'braincheck.environment' => 'development'
+  }
+
+desc 'GwtRouter: A router for gwt'
+define 'gwt-router' do
+  project.group = 'org.realityforge.gwt.router'
+  compile.options.source = '1.8'
+  compile.options.target = '1.8'
+  compile.options.lint = 'all'
+
+  project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
+
+  desc 'The core router code'
+  define 'core' do
+    pom.provided_dependencies.concat PROVIDED_DEPS
+
+    compile.with PROVIDED_DEPS,
+                 :elemental2_core,
+                 :jsinterop_base,
+                 :jsinterop_base_sources,
+                 :jsinterop_annotations,
+                 :jsinterop_annotations_sources,
+                 :braincheck,
+                 # Next dependency can probably moved to example module when possible
+                 :gwt_user
+
+    test.options[:properties] = REACT_TEST_OPTIONS
+    test.options[:java_args] = ['-ea']
+
+    gwt_enhance(project, :modules_complete => true, :package_jars => false)
+
+    package(:jar)
+    package(:sources)
+    package(:javadoc)
+
+    test.using :testng
+    test.compile.with TEST_DEPS
+  end
+
+  iml.excluded_directories << project._('tmp/gwt')
+  iml.excluded_directories << project._('tmp')
+
+  ipr.add_default_testng_configuration(:jvm_args => '-ea -Dbraincheck.environment=development')
+  ipr.add_component_from_artifact(:idea_codestyle)
+
+  ipr.add_gwt_configuration(project('core'),
+                            :gwt_module => 'router.RouterDev',
+                            :start_javascript_debugger => false,
+                            :vm_parameters => "-Xmx2G -Djava.io.tmpdir=#{_('tmp/gwt')}",
+                            :shell_parameters => "-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/")
 end
-
-BuildrPlus::Roles.role(:user_experience) do
-  compile.with BuildrPlus::Libs.gwt_lognice, 'com.google.gwt:elemental2-experimental:jar:16-06-30'
-end
-
-require 'buildr_plus/activate'
