@@ -1,11 +1,7 @@
-# DO NOT EDIT: File is auto-generated
 **/generated
 *.iml
 /*.ipr
 /*.iws
-/artifacts
-/config/application.yml
 /reports
 /target
 /tmp
-/volumes
