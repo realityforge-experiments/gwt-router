@@ -81,29 +81,13 @@ public final class Router
     _routeManager.install();
     try
     {
-      info( "Router started" );
+      DomGlobal.window.console.info( "Router started" );
       _routeManager.route();
     }
     catch ( final Exception e )
     {
-      warn( "Unexpected problem initializing the Router application: " + e );
+      DomGlobal.window.console.warn( "Unexpected problem initializing the Router application: " + e );
       DomGlobal.window.alert( "Error: " + e.getMessage() );
     }
   }
-
-  public static native void error( String message ) /*-{
-    window.console.error(message);
-  }-*/;
-
-  public static native void warn( String message ) /*-{
-    window.console.warn(message);
-  }-*/;
-
-  public static native void info( String message ) /*-{
-    window.console.info(message);
-  }-*/;
-
-  public static native void log( String message ) /*-{
-    window.console.log(message);
-  }-*/;
 }
